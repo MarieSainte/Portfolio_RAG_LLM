@@ -1,0 +1,52 @@
+# Déploiement serveur : images pré-buildées par la CI (ghcr.io), aucun build local.
+# Utilisé par le workflow .github/workflows/deploy.yml
+# Lancement manuel sur le serveur : docker compose -f docker-compose.prod.yml up -d
+
+services:
+  chromadb:
+    image: chromadb/chroma:0.4.24
+    container_name: portfolio_chromadb
+    restart: unless-stopped
+    volumes:
+      - chroma_data:/chroma/chroma
+    environment:
+      - ANONYMIZED_TELEMETRY=FALSE
+    networks:
+      - portfolio_net
+
+  backend:
+    image: ghcr.io/mariesainte/portfolio-backend:latest
+    container_name: portfolio_backend
+    restart: unless-stopped
+    depends_on:
+      - chromadb
+    environment:
+      - CHROMA_HOST=chromadb
+      - CHROMA_PORT=8000
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY}
+      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
+      - LANGSMITH_TRACING=${LANGSMITH_TRACING:-false}
+      - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-https://api.smith.langchain.com}
+      - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
+      - LANGSMITH_PROJECT=${LANGSMITH_PROJECT:-portfolio-chatbot}
+    networks:
+      - portfolio_net
+
+  frontend:
+    image: ghcr.io/mariesainte/portfolio-frontend:latest
+    container_name: portfolio_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    # Seul port exposé : le frontend nginx sert l'app et proxifie /api vers le backend
+    ports:
+      - "8080:80"
+    networks:
+      - portfolio_net
+
+networks:
+  portfolio_net:
+    driver: bridge
+
+volumes:
+  chroma_data:

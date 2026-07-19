@@ -4,11 +4,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { MarkdownPipe } from '../../../shared/markdown.pipe';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [RouterLink, TranslateModule, FormsModule, CommonModule],
+  imports: [RouterLink, TranslateModule, FormsModule, CommonModule, MarkdownPipe],
   template: `
     <section class="hero" [style.--mx]="mouseX" [style.--my]="mouseY">
       <div class="container">
@@ -110,9 +111,17 @@ import { HttpClient } from '@angular/common/http';
                     <div class="chat-messages" #scrollContainer>
                       @for (msg of messages; track $index) {
                         <div class="message" [class.message--user]="msg.sender === 'user'">
-                          <div class="message-bubble">
-                            {{ msg.isKey ? (msg.text | translate) : msg.text }}
-                          </div>
+                          @if (msg.sender === 'bot' && !msg.isKey) {
+                            <!-- Réponses du bot en Markdown (assaini par Angular) -->
+                            <div
+                              class="message-bubble markdown"
+                              [innerHTML]="msg.text | markdown"
+                            ></div>
+                          } @else {
+                            <div class="message-bubble">
+                              {{ msg.isKey ? (msg.text | translate) : msg.text }}
+                            </div>
+                          }
                         </div>
                       }
                       @if (isTyping) {

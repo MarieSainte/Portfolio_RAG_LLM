@@ -687,3 +687,76 @@
     opacity: 1;
   }
 }
+
+// Rendu Markdown des réponses du bot.
+// ::ng-deep nécessaire : le HTML injecté via [innerHTML] échappe à l'encapsulation
+// Angular. On le scope sous .message-bubble.markdown pour limiter la portée.
+.message-bubble.markdown {
+  ::ng-deep {
+    > *:first-child {
+      margin-top: 0;
+    }
+    > *:last-child {
+      margin-bottom: 0;
+    }
+
+    p {
+      margin: 0 0 8px;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 12px 0 6px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    ul,
+    ol {
+      margin: 6px 0;
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin: 2px 0;
+    }
+
+    a {
+      color: var(--accent, #d97706);
+      text-decoration: underline;
+      word-break: break-word;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 0.85em;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 10px 12px;
+      border-radius: 8px;
+      overflow-x: auto;
+
+      code {
+        background: none;
+        padding: 0;
+      }
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      margin: 10px 0;
+    }
+  }
+}

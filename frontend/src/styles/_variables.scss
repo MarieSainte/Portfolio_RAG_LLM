@@ -1,0 +1,85 @@
+// ============================================
+// COLOR PALETTE — Dark Premium Theme
+// ============================================
+:root {
+  // COMMON (COZY THEME)
+  --accent: #d97706; // Amber 600
+  --accent-2: #f59e0b; // Amber 500
+  --accent-3: #78350f; // Brown 700
+  --accent-glow: rgba(217, 119, 6, 0.15);
+  --accent-2-glow: rgba(245, 158, 11, 0.1);
+
+  --gradient: linear-gradient(135deg, #78350f 0%, #d97706 100%);
+  --gradient-alt: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  --gradient-text: linear-gradient(135deg, #f59e0b, #d97706);
+
+  --radius-sm: 10px;
+  --radius-md: 20px;
+  --radius-lg: 30px;
+  --radius-xl: 40px;
+
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.4s ease;
+  --transition-slow: 0.8s ease;
+
+  --navbar-height: 70px;
+
+  // DARK MODE (COZY DARK)
+  --bg-primary: #0c0a09; // Stone 950
+  --bg-primary-rgb: 12, 10, 9;
+  --bg-secondary: #1c1917; // Stone 900
+  --bg-card: #292524; // Stone 800
+  --bg-card-hover: #44403c; // Stone 700
+  --border: rgba(217, 119, 6, 0.1);
+  --border-hover: rgba(217, 119, 6, 0.25);
+
+  --text-primary: #fafaf9; // Stone 50
+  --text-secondary: #d6d3d1; // Stone 300
+  --text-muted: #a8a29e; // Stone 400
+
+  --shadow-sm: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 40px rgba(217, 119, 6, 0.08);
+  --glass-bg: rgba(28, 25, 23, 0.4);
+  --glass-border: rgba(217, 119, 6, 0.08);
+}
+
+body.light-mode {
+  --bg-primary: #fffaf0; // Floral White (cozy warm white)
+  --bg-primary-rgb: 255, 250, 240;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fffbeb; // Amber 50
+  --border: rgba(217, 119, 6, 0.1);
+  --border-hover: rgba(217, 119, 6, 0.2);
+
+  --text-primary: #451a03; // Brown 950
+  --text-secondary: #78350f; // Brown 900
+  --text-muted: #a16207; // Brown 600
+
+  --shadow-sm: 0 4px 15px rgba(120, 53, 15, 0.05);
+  --shadow-md: 0 12px 35px rgba(120, 53, 15, 0.1);
+  --shadow-glow: 0 0 40px rgba(217, 119, 6, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(217, 119, 6, 0.1);
+
+  --gradient-text: var(--gradient);
+}
+
+// ============================================
+// BREAKPOINTS
+// ============================================
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+$bp-xxl: 1400px;
+
+// ============================================
+// Z-INDEX
+// ============================================
+$z-base: 1;
+$z-card: 10;
+$z-navbar: 100;
+$z-overlay: 200;
+$z-modal: 300;

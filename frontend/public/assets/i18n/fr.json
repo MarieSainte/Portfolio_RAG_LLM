@@ -1,0 +1,286 @@
+{
+  "NAV": {
+    "HOME": "Présentation",
+    "PROJECTS": "Projets",
+    "MIND_MAP": "Carte Mentale",
+    "CONTACT": "Contact"
+  },
+  "THEME": {
+    "TOGGLE": "Changer le mode"
+  },
+  "HOME": {
+    "HERO": {
+      "GREETING": "Bonjour, je suis",
+      "NAME": "Jordan Marie-Sainte",
+      "TITLE": "Ingénieur IA",
+      "SUBTITLE": "Fort de 5 ans d'expérience en support helpdesk & applicatif, je me réoriente vers l'Intelligence Artificielle pour créer des systèmes intelligents qui résolvent des problèmes concrets.",
+      "CTA_PROJECTS": "Voir mes projets",
+      "CTA_CONTACT": "Me contacter",
+      "ROBOT_HELPER": "Discutez avec mon assistant IA pour découvrir mes projets et compétences.",
+      "CHAT": {
+        "WELCOME": "Bonjour ! Je suis l'assistant virtuel de Jordan. Comment puis-je vous aider aujourd'hui ?",
+        "STATUS": "Assistant IA",
+        "PLACEHOLDER": "Message...",
+        "ERROR": "Désolé, je rencontre des difficultés pour me connecter au cerveau de Mistral. Vérifiez que le backend est lancé !"
+      },
+      "SCROLL": "Défiler"
+    },
+    "SKILLS": {
+      "TAG": "Compétences",
+      "TITLE": "Soft Skills",
+      "SUBTITLE": "Au-delà du code, ce sont ces qualités humaines qui font la différence.",
+      "ITEMS": {
+        "ANALYSIS": {
+          "TITLE": "Esprit d'analyse",
+          "DESC": "Décomposer des problèmes complexes pour en extraire l'essentiel et trouver des solutions pertinentes."
+        },
+        "PROBLEM_SOLVING": {
+          "TITLE": "Résolution de problèmes",
+          "DESC": "5 ans de support technique ont forgé une approche méthodique et efficace face à chaque défi."
+        },
+        "CURIOSITY": {
+          "TITLE": "Curiosité intellectuelle",
+          "DESC": "Apprentissage continu : toujours en veille sur les dernières avancées en IA et technologies."
+        },
+        "CREATIVITY": {
+          "TITLE": "Créativité",
+          "DESC": "Concevoir des approches originales pour répondre à des problèmes techniques et business."
+        },
+        "BUSINESS": {
+          "TITLE": "Pensée business",
+          "DESC": "Comprendre les enjeux métier pour aligner les solutions technologiques aux objectifs de l'entreprise."
+        },
+        "LEARNING": {
+          "TITLE": "Apprentissage continu",
+          "DESC": "Reconversion réussie : passer du support IT à l'IA grâce à une autodiscipline et une passion constantes."
+        }
+      }
+    },
+    "TECH_SKILLS": {
+      "TAG": "Expertise",
+      "TITLE": "Maîtrise Technique",
+      "SUBTITLE": "Mes compétences techniques acquises tout au long de ma formation.",
+      "CATEGORIES": {
+        "AI_ML": "IA / Machine Learning",
+        "LANGUAGES": "Langages & Frameworks",
+        "TOOLS": "Outils"
+      },
+      "ITEMS": {
+        "PYTHON": "Python",
+        "MACHINE_LEARNING": "Machine Learning",
+        "DEEP_LEARNING": "Deep Learning",
+        "NLP": "NLP / LLM",
+        "FINETUNING": "Fine-tuning LLM (SFT · DPO)",
+        "RAG": "RAG",
+        "AGENTIC": "Agents IA (LangGraph)",
+        "REINFORCEMENT_LEARNING": "Apprentissage par renforcement",
+        "ANGULAR": "Angular",
+        "KOTLIN": "Kotlin",
+        "JAVA": "Java",
+        "FASTAPI": "FastAPI",
+        "LANGCHAIN": "LangChain",
+        "DSPY": "DSPy",
+        "VLLM": "vLLM",
+        "OPTUNA": "Optuna",
+        "MLFLOW": "MLFlow",
+        "PYTORCH": "PyTorch",
+        "SCIKIT": "Scikit-learn",
+        "DOCKER": "Docker",
+        "GIT": "Git",
+        "SQL": "SQL"
+      }
+    },
+    "ABOUT": {
+      "TAG": "À propos",
+      "TITLE": "Mon parcours",
+      "TEXT_1": "Avec 5 ans d'expérience en support helpdesk & applicatif (niveau 1 & 2), j'ai développé une solide capacité à analyser, diagnostiquer et résoudre des problèmes techniques complexes sous pression.",
+      "TEXT_2": "Cette expérience terrain, combinée à ma reconversion en Ingénierie IA, me permet d'aborder l'intelligence artificielle with une double perspective : technique et orientée utilisateur.",
+      "TEXT_3": "Je construis aujourd'hui des compétences en Machine Learning et en ingénierie LLM (fine-tuning SFT/DPO, RAG, agents) avec pour objectif de créer des solutions IA à fort impact métier.",
+      "DOWNLOAD_CV": "Télécharger CV"
+    }
+  },
+  "PROJECTS": {
+    "TAG": "Portfolio",
+    "TITLE": "Mes Projets",
+    "SUBTITLE": "Découvrez mes projets académiques et personnels en IA et développement.",
+    "FILTER": {
+      "ALL": "Tous",
+      "STUDENT": "Étudiants",
+      "PERSONAL": "Personnel"
+    },
+    "CARD": {
+      "VIEW": "Voir le projet",
+      "CODE": "Code source",
+      "STUDENT_LABEL": "Projet Étudiant",
+      "PERSONAL_LABEL": "Projet Personnel"
+    },
+    "PORTFOLIO": {
+      "TITLE": "Portfolio & Assistant RAG",
+      "DESC": "Ce site : un portfolio d'AI Engineer avec carte mentale interactive et assistant conversationnel RAG (ChromaDB + Mistral AI) qui présente mes projets aux recruteurs à partir de données réelles. Frontend Angular, backend FastAPI, conteneurisé avec Docker."
+    },
+    "STUDENT_1": {
+      "TITLE": "Chatbot de Triage Médical",
+      "DESC": "Agent conversationnel bilingue (Qwen3-1.7B) pour le triage des urgences. Fine-tuné SFT + DPO (LoRA/Unsloth), prompts optimisés DSPy, servi par vLLM sur GPU. CI/CD avec gate d'évaluation bloquante, monitoring Prometheus/Grafana, PostgreSQL, Docker."
+    },
+    "NEUROVA": {
+      "TITLE": "Neurova — Entraînement Cérébral",
+      "DESC": "Application mobile de brain-training : 11 jeux cognitifs solo (mémoire, spatial, mots, logique) et 4 jeux multijoueur temps réel via WebSocket. Backend Rust (Axum) serveur-autoritatif, PostgreSQL/Redis, monétisation AdMob + abonnement premium. Sortie le 1er août sur Android et iOS."
+    },
+    "STUDENT_2": {
+      "TITLE": "Coach d'Échecs IA Interactif",
+      "DESC": "Agent intelligent (LangGraph) pour l’entraînement aux ouvertures. Analyse hybride Lichess/Stockfish, RAG sur WikiChess via Milvus, et suggestions YouTube contextuelles."
+    },
+    "EMPTY": "Projets bientôt disponibles...",
+    "MODAL": {
+      "DESCRIPTION": "Description du projet",
+      "MEDIA_SOON": "Vidéo bientôt disponible"
+    }
+  },
+  "MIND_MAP": {
+    "TAG": "Exploration",
+    "TITLE": "Carte Mentale",
+    "SUBTITLE": "Mon parcours d'Ingénieur IA en 15 projets. Cliquez sur un projet pour découvrir ses missions, sa stack technique, ses soft skills et un fait marquant.",
+    "HINT": "Cliquez sur un projet pour le déplier · Molette pour zoomer · Glissez pour déplacer",
+    "ROOT_NAME": "Jordan Marie-Sainte",
+    "ROOT_ROLE": "Ingénieur IA",
+    "ZOOM_IN": "Zoomer",
+    "ZOOM_OUT": "Dézoomer",
+    "RESET": "Recentrer la carte",
+    "LEGEND": {
+      "ML": "Machine Learning",
+      "MLOPS": "MLOps & Production",
+      "DLRL": "Deep Learning & RL",
+      "GENAI": "GenAI & LLM",
+      "PILOT": "Cadrage & pilotage"
+    },
+    "LABEL": {
+      "MISSIONS": "Missions",
+      "STACK": "Stack technique",
+      "SOFT": "Soft skills",
+      "FACT": "Fait marquant"
+    },
+    "P1": {
+      "SHORT": "P1 · Cadrage de la formation",
+      "MISSIONS": "Me projeter dans la formation : définir mon planning de travail, choisir l'outil de collaboration avec mon mentor et m'approprier les attendus du parcours.",
+      "SOFT": "Organisation · Projection à long terme · Discipline",
+      "FACT": "Structurer 15 projets comme un emploi du temps : une vraie préparation mentale pour tenir une formation sur le long terme."
+    },
+    "P2": {
+      "SHORT": "P2 · Services IA — ModeTrends",
+      "MISSIONS": "Mettre en place un environnement IA et exploiter un modèle pré-entraîné pour segmenter les vêtements sur des images d'influenceurs et analyser les tendances mode.",
+      "SOFT": "Curiosité · Autonomie"
+    },
+    "P3": {
+      "SHORT": "P3 · Prédiction énergétique",
+      "MISSIONS": "Prédire la consommation énergétique des bâtiments de Seattle : analyse exploratoire, nettoyage automatisé, mise à l'échelle des variables, entraînement et synthèse des résultats.",
+      "SOFT": "Rigueur analytique · Communication & vulgarisation"
+    },
+    "P4": {
+      "SHORT": "P4 · Classification — Attrition",
+      "MISSIONS": "Détecter les départs d'employés : classification supervisée sur des données RH déséquilibrées, préparation des données et évaluation du modèle.",
+      "SOFT": "Esprit critique · Analyse"
+    },
+    "P5": {
+      "SHORT": "P5 · Déploiement ML — Futurisys",
+      "MISSIONS": "Suite du P4 : mettre le modèle d'attrition en production. API sécurisée, base de données, tests automatisés et déploiement continu sur Hugging Face Spaces.",
+      "SOFT": "Rigueur d'ingénierie · Autonomie",
+      "FACT": "Premier déploiement de bout en bout : le déclic qui m'a rendu autonome sur mes projets personnels."
+    },
+    "P6": {
+      "SHORT": "P6 · MLOps 1/2 — Credit Scoring",
+      "MISSIONS": "Modéliser un score de crédit (classification binaire bancaire) : EDA approfondie, optimisation des hyperparamètres avec Optuna, gestion de l'overfitting et cycle de vie du modèle versionné avec MLflow.",
+      "SOFT": "Esprit d'analyse (EDA, Optuna, MLflow) · Méthode",
+      "FACT": "Ces compétences m'ont permis de présenter des projets perso à des amis."
+    },
+    "P7": {
+      "SHORT": "P7 · Système RAG — Puls-Events",
+      "MISSIONS": "Concevoir et déployer un chatbot RAG sur des événements culturels : recherche vectorielle, génération fidèle au contexte, API et évaluation automatisée de la qualité.",
+      "SOFT": "Créativité · Sens du besoin métier"
+    },
+    "P8": {
+      "SHORT": "P8 · MLOps 2/2 — Mise en prod",
+      "MISSIONS": "Suite du P6 : industrialiser le scoring. Dashboard d'explication des octrois de crédit, API dans le cloud, déploiement automatisé, monitoring complet et étude du drift.",
+      "SOFT": "Autonomie de bout en bout · Sens de la production",
+      "FACT": "Savoir maintenir un modèle et une API en production : j'ai l'impression que les entreprises recherchent beaucoup ce genre de compétence."
+    },
+    "P9": {
+      "SHORT": "P9 · Cadrage projet IA",
+      "MISSIONS": "Cadrer un produit IA pour un COMEX : analyser le besoin, identifier les opportunités, évaluer les risques, planifier, prototyper la faisabilité et convaincre les dirigeants.",
+      "SOFT": "Analyse du besoin · Communication & vulgarisation · Gestion des risques"
+    },
+    "P10": {
+      "SHORT": "P10 · Vision — BrainScanAI",
+      "MISSIONS": "Analyser des IRM cérébrales : labellisation semi-supervisée par clustering d'embeddings, puis classification supervisée par CNN.",
+      "SOFT": "Précision · Esprit d'analyse",
+      "FACT": "C'est la vision par ordinateur qui m'a attiré vers cette formation : ce projet était celui que j'attendais le plus au départ."
+    },
+    "P11": {
+      "SHORT": "P11 · Agent RL — Bot Lunaire",
+      "MISSIONS": "Entraîner un agent DQN sur LunarLander et l'exposer via une API avec tableaux de bord interactifs et visualisation des épisodes.",
+      "SOFT": "Expérimentation · Persévérance"
+    },
+    "P12": {
+      "SHORT": "P12 · Data pipeline — CheckItAI",
+      "MISSIONS": "Construire un pipeline ETL multimodal (texte + image) depuis des flux RSS, orchestré par Airflow, avec des KPI de qualité, latence et coût.",
+      "SOFT": "Pensée système · Rigueur sur la qualité des données"
+    },
+    "P13": {
+      "SHORT": "P13 · Agent IA — Échecs FFE",
+      "MISSIONS": "Réaliser un POC d'agent coach d'ouvertures d'échecs : orchestrer la théorie, un moteur tactique, un RAG et des recommandations vidéo au sein d'un même graphe décisionnel.",
+      "SOFT": "Architecture logicielle · Apprentissage continu",
+      "FACT": "Le projet qui a changé ma vision du métier : au-delà des chatbots de support, on peut construire des agents qui assistent réellement des professionnels dans leur travail."
+    },
+    "P14": {
+      "SHORT": "P14 · Fine-tuning LLM — Triage médical",
+      "MISSIONS": "Développer un POC d'agent de triage médical : constitution et anonymisation du dataset, fine-tuning SFT + DPO, serving GPU optimisé et déploiement cloud automatisé.",
+      "SOFT": "Éthique des données · Rigueur · Persévérance",
+      "FACT": "La révélation de ce projet : le dataset est le cœur du travail. Après cette étape de préparation, tout le reste m'a paru presque secondaire."
+    },
+    "P15": {
+      "SHORT": "P15 · Portfolio & Chatbot RAG",
+      "MISSIONS": "Concevoir ce portfolio et son assistant RAG qui présente mes projets aux recruteurs à partir de données réelles.",
+      "SOFT": "Synthèse · Communication & vulgarisation",
+      "FACT": "Le portfolio est lui-même un projet technique : ce site embarque son propre chatbot RAG."
+    }
+  },
+  "CONTACT": {
+    "TAG": "Contact",
+    "TITLE": "Parlons-en",
+    "SUBTITLE": "Une idée de projet ? Une opportunité ? N'hésitez pas à me contacter.",
+    "FORM": {
+      "NAME": "Nom complet",
+      "NAME_PLACEHOLDER": "Jean Dupont",
+      "EMAIL": "Adresse email",
+      "EMAIL_PLACEHOLDER": "jean.dupont@email.com",
+      "SUBJECT": "Sujet",
+      "SUBJECT_PLACEHOLDER": "Opportunité de stage / Collaboration...",
+      "MESSAGE": "Message",
+      "MESSAGE_PLACEHOLDER": "Bonjour, je voudrais...",
+      "SEND": "Envoyer le message",
+      "SENDING": "Envoi en cours...",
+      "SUCCESS": "Message envoyé avec succès !",
+      "ERROR": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "INFO": {
+      "TITLE": "Informations de contact",
+      "EMAIL_LABEL": "Email",
+      "LOCATION_LABEL": "Localisation",
+      "LOCATION_VALUE": "France",
+      "AVAILABILITY": "Disponibilité",
+      "AVAILABILITY_VALUE": "Ouvert aux opportunités"
+    },
+    "SOCIAL": {
+      "TITLE": "Retrouvez-moi sur"
+    }
+  },
+  "FOOTER": {
+    "TAGLINE": "Enseigner l'esthétique aux machines, un pixel à la fois.",
+    "RIGHTS": "Tous droits réservés.",
+    "MADE_WITH": "Fait avec"
+  },
+  "LANG": {
+    "FR": "Français",
+    "EN": "English",
+    "SWITCH": "EN"
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "question": "Parle-moi du projet de chatbot de triage médical de Jordan.",
+    "reference": "Jordan a conçu un POC de chatbot bilingue (FR/EN) de triage des urgences médicales : dataset de 4 771 exemples SFT et 500 paires DPO anonymisées (Presidio, spaCy, RGPD), fine-tuning de Qwen3-1.7B-Base en QLoRA 4-bit avec Unsloth et TRL (SFT puis DPO), serving vLLM avec une latence P95 de 1,8 s, API FastAPI avec PostgreSQL, CI/CD GitHub Actions avec gate d'évaluation bloquante (rappel urgence Haute >= 0.90) et monitoring Prometheus/Grafana. Résultats : rappel urgence Haute 100 %, accuracy 90 %."
+  },
+  {
+    "question": "Quelles technologies ont été utilisées dans le projet d'échecs pour la FFE ?",
+    "reference": "Le FFE Chess Agent utilise Python et FastAPI côté backend, LangGraph et LangChain pour l'orchestration agentique, Milvus comme base vectorielle pour le RAG, MongoDB pour l'historique, le moteur Stockfish et l'API Lichess pour l'analyse des ouvertures, l'API YouTube pour les recommandations vidéo, et Angular avec chess.js et Chessground côté frontend, le tout conteneurisé avec Docker et Docker Compose."
+  },
+  {
+    "question": "Jordan a-t-il de l'expérience en fine-tuning de LLM ?",
+    "reference": "Oui. Dans le projet de chatbot de triage médical, Jordan a fine-tuné Qwen3-1.7B-Base en QLoRA 4-bit (LoRA r=16) avec Unsloth et TRL sur un GPU 6 Go : SFT sur 1 400 steps puis alignement DPO, avec tracking MLflow. Jordan a aussi corrigé un bug d'arrêt de génération par chirurgie d'embeddings des tokens ChatML, faisant passer l'arrêt EOS de 0 % à 100 %."
+  },
+  {
+    "question": "Quels projets de Jordan démontrent des compétences MLOps et CI/CD ?",
+    "reference": "Plusieurs projets : le système de scoring de crédit (monitoring de dérive avec Evidently AI, Prometheus, Grafana, logs Fluentd/Elasticsearch, CI/CD GitHub Actions vers Hugging Face Spaces), le chatbot de triage médical (CI/CD GitHub Actions avec gate d'évaluation bloquante, images ghcr.io, déploiement SSH automatisé, rollback par tag), Futurisys (tests Pytest et pipeline CI/CD) et Neurova (build Docker, push ghcr.io, déploiement automatisé)."
+  },
+  {
+    "question": "Qu'est-ce que Neurova ?",
+    "reference": "Neurova est une application mobile d'entraînement cérébral développée en solo par Jordan, dont la sortie est prévue le 1er août 2026 sur Android et iOS : 11 jeux cognitifs solo répartis en 4 modules (Mémoire, Spatial, Mots, Logique) et 4 jeux multijoueur en temps réel à 2 joueurs via WebSocket. Développée en Flutter/Dart avec un backend temps réel serveur-autoritatif en Rust (Axum, Tokio, SeaORM), PostgreSQL et Redis, monétisée via Google AdMob et un abonnement premium."
+  },
+  {
+    "question": "Jordan a-t-il déjà évalué la qualité d'un système RAG ?",
+    "reference": "Oui. Pour le chatbot Puls-Events (recommandation d'événements culturels), Jordan a utilisé le framework Ragas (LLM-as-a-judge) afin de mesurer la faithfulness, la context precision, le context recall et l'answer relevancy, avec un dataset de test dédié (test_cases.json), atteignant une précision de contexte de 1.0 sur les tests de référence."
+  }
+]

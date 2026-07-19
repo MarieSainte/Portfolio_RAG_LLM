@@ -1,0 +1,299 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: $z-navbar;
+  height: var(--navbar-height);
+  transition: all var(--transition-base);
+
+  &__inner {
+    @include flex-between;
+    height: var(--navbar-height);
+    gap: 32px;
+  }
+
+  &--scrolled {
+    background: var(--bg-primary);
+    background-color: rgba(var(--bg-primary-rgb, 7, 7, 15), 0.85); // Note: ideally we'd have RGB vars
+    // Simplified for now to just use the var
+    background: var(--bg-primary);
+    opacity: 0.98;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+
+  // ---- LOGO ----
+  &__logo {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    transition: transform var(--transition-base);
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &-bracket {
+      @include gradient-text(var(--gradient));
+      font-size: 1.4rem;
+    }
+
+    &-initials {
+      color: var(--text-primary);
+      letter-spacing: 0.05em;
+    }
+  }
+
+  // ---- LINKS ----
+  &__links {
+    display: none;
+    align-items: center;
+    gap: 8px;
+
+    @include lg {
+      display: flex;
+    }
+  }
+
+  &__link {
+    position: relative;
+    padding: 8px 16px;
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      border-radius: 2px;
+      transition: width var(--transition-base);
+    }
+
+    &:hover,
+    &.active {
+      color: var(--text-primary);
+
+      &::after {
+        width: calc(100% - 32px);
+      }
+    }
+
+    &--cta {
+      background: rgba(108, 99, 255, 0.1);
+      border: 1px solid rgba(108, 99, 255, 0.3);
+      color: var(--accent);
+
+      &::after {
+        display: none;
+      }
+
+      &:hover {
+        background: rgba(108, 99, 255, 0.2);
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 20px rgba(108, 99, 255, 0.2);
+      }
+
+      &.active {
+        background: var(--gradient);
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 4px 20px rgba(108, 99, 255, 0.35);
+      }
+    }
+  }
+
+  // ---- ACTIONS ----
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  // ---- OVERLAY (mobile) ----
+  &__overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: $z-navbar - 1;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+
+    &--show {
+      opacity: 1;
+    }
+  }
+}
+
+// ---- LANG BUTTON ----
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: all var(--transition-base);
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(108, 99, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  &__flag {
+    font-size: 1rem;
+  }
+}
+
+// ---- THEME TOGGLE ----
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  &:hover {
+    background: rgba(108, 99, 255, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  &__icon {
+    font-size: 1.2rem;
+  }
+}
+
+// ---- HAMBURGER ----
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+
+  span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text-muted);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+  }
+
+  &:hover {
+    border-color: var(--accent);
+
+    span {
+      background: var(--accent);
+    }
+  }
+
+  &--open {
+    span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    span:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
+
+    span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+  }
+
+  @include lg {
+    display: none;
+  }
+}
+
+// ============================================
+// MOBILE MENU
+// ============================================
+@media (max-width: #{$bp-lg - 1px}) {
+  .navbar__links {
+    position: fixed;
+    top: 0;
+    right: -300px;
+    width: 300px;
+    height: 100vh;
+    background: var(--bg-secondary);
+    border-left: 1px solid var(--border);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: calc(var(--navbar-height) + 32px) 24px 40px;
+    gap: 8px;
+    z-index: $z-navbar;
+    transition: right var(--transition-slow) cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+
+    &--open {
+      right: 0;
+      box-shadow: -20px 0 60px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .navbar__link {
+    width: 100%;
+    font-size: 1rem;
+    padding: 14px 20px;
+
+    &--cta {
+      margin-top: 16px;
+      text-align: center;
+      justify-content: center;
+    }
+  }
+
+  .navbar__overlay {
+    display: block;
+    pointer-events: none;
+
+    &--show {
+      pointer-events: all;
+    }
+  }
+}

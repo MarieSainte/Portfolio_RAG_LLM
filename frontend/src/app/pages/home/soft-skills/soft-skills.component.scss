@@ -1,0 +1,94 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.soft-skills {
+  background: var(--bg-secondary);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--gradient);
+    opacity: 0.3;
+  }
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+
+  @include md {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include lg {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.skill-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 32px;
+  overflow: hidden;
+  transition: all var(--transition-base);
+  cursor: default;
+
+  &:hover {
+    border-color: var(--card-color, var(--accent));
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
+                0 0 0 1px var(--card-color, var(--accent)),
+                0 0 30px color-mix(in srgb, var(--card-color) 20%, transparent);
+
+    .skill-card__icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .skill-card__accent {
+      opacity: 0.15;
+      transform: translate(20px, -20px) scale(1.2);
+    }
+  }
+
+  &__icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    display: inline-block;
+    transition: transform var(--transition-base);
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    font-family: 'Roboto Mono', sans-serif;
+  }
+
+  &__desc {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  &__accent {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    background: var(--card-color, var(--accent));
+    border-radius: 50%;
+    opacity: 0.06;
+    transition: all var(--transition-slow);
+    pointer-events: none;
+  }
+}

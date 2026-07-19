@@ -1,0 +1,16 @@
+# Secrets & environnement
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+
+# Résultats d'évaluation
+backend/evals/ragas_results.csv

@@ -1,0 +1,370 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+// The app shell already pads for the fixed navbar; the map fills the rest
+// ---- VIEWPORT (full screen under the navbar) ----
+.mm-viewport {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--navbar-height));
+  min-height: 480px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// Dot grid that fades out toward the edges — no hard frame
+.mm-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--accent) 22%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(ellipse 65% 60% at 50% 50%, black 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 65% 60% at 50% 50%, black 30%, transparent 85%);
+}
+
+// ---- CANVAS (pan / zoom layer) ----
+.mm-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2600px;
+  height: 2600px;
+  transform-origin: 0 0;
+  will-change: transform;
+
+  &--animate {
+    transition: transform 0.5s ease;
+  }
+}
+
+// Warm halo breathing behind the central node
+.mm-halo {
+  position: absolute;
+  left: 1300px;
+  top: 1300px;
+  width: 950px;
+  height: 950px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(circle, var(--accent-glow) 0%, transparent 65%);
+  animation: mm-breathe 6s ease-in-out infinite;
+}
+
+@keyframes mm-breathe {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+// ---- LINKS ----
+.mm-links {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  animation: mm-fade 1.2s ease backwards 0.3s;
+}
+
+.mm-link {
+  fill: none;
+  stroke-width: 1.4;
+  opacity: 0.3;
+  transition: opacity var(--transition-fast);
+
+  &--active {
+    opacity: 0.95;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+
+  &--child {
+    opacity: 0.75;
+    stroke-dasharray: 5 4;
+  }
+}
+
+.mm-canvas--dimmed .mm-link:not(.mm-link--active):not(.mm-link--child) {
+  opacity: 0.06;
+}
+
+// ---- CENTRAL NODE ----
+.mm-center {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 20px 34px;
+  @include glass($blur: 16px);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 50px var(--accent-glow), var(--shadow-md);
+  cursor: pointer;
+  z-index: 4;
+  text-align: center;
+  animation: mm-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+
+  &__name {
+    font-family: 'Roboto Mono', monospace;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  &__role {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    @include gradient-text;
+  }
+}
+
+// ---- PROJECT NODES ----
+.mm-node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 15px 7px 8px;
+  @include glass($blur: 12px);
+  border: 1px solid color-mix(in srgb, var(--node-color) 45%, transparent);
+  border-radius: 100px;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  z-index: 3;
+  animation: mm-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  animation-delay: calc(0.15s + var(--i) * 0.05s);
+  transition: opacity var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast), background var(--transition-fast);
+
+  &__icon {
+    @include flex-center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--node-color) 18%, transparent);
+    font-size: 0.85rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  &:hover {
+    border-color: var(--node-color);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--node-color) 35%, transparent);
+  }
+
+  &--open {
+    background: color-mix(in srgb, var(--node-color) 16%, var(--glass-bg));
+    border-color: var(--node-color);
+    box-shadow: 0 0 30px color-mix(in srgb, var(--node-color) 40%, transparent);
+    z-index: 5;
+  }
+}
+
+.mm-canvas--dimmed .mm-node:not(.mm-node--open) {
+  opacity: 0.18;
+}
+
+.mm-canvas--dimmed .mm-center {
+  opacity: 0.4;
+}
+
+.mm-canvas--dimmed .mm-halo {
+  opacity: 0.3;
+  animation: none;
+}
+
+// ---- CHILD CARDS (missions / stack / soft skills / highlight) ----
+.mm-child {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 214px;
+  padding: 12px 14px;
+  @include glass($blur: 16px);
+  border: 1px solid color-mix(in srgb, var(--node-color) 35%, transparent);
+  border-left: 3px solid var(--node-color);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 6;
+  text-align: left;
+  animation: mm-pop 0.35s ease backwards;
+
+  &__label {
+    display: block;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--node-color);
+    margin-bottom: 5px;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.73rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  &--fact {
+    background: color-mix(in srgb, var(--node-color) 10%, var(--glass-bg));
+
+    p {
+      font-style: italic;
+      color: var(--text-primary);
+    }
+  }
+}
+
+// ---- LINK PILLS (shown on the open project's branch) ----
+.mm-linkbar {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 6px;
+  z-index: 6;
+  animation: mm-pop 0.35s ease backwards 0.1s;
+}
+
+.mm-pill-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  @include glass($blur: 12px);
+  border: 1px solid color-mix(in srgb, var(--node-color) 45%, transparent);
+  border-radius: 100px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+
+  &:hover {
+    border-color: var(--node-color);
+    box-shadow: 0 0 16px color-mix(in srgb, var(--node-color) 35%, transparent);
+    color: var(--text-primary);
+  }
+}
+
+.mm-tag {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 100px;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.62rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  background: color-mix(in srgb, var(--node-color) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--node-color) 32%, transparent);
+}
+
+// ---- CONTROLS ----
+.mm-controls {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+
+  button {
+    @include flex-center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--border-hover);
+    @include glass($blur: 10px);
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+
+    &:hover {
+      border-color: var(--accent);
+      color: var(--accent-2);
+      box-shadow: 0 0 14px var(--accent-glow);
+    }
+  }
+}
+
+// ---- HINT ----
+.mm-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 5px 16px;
+  border-radius: 100px;
+  @include glass($blur: 10px);
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 10;
+  white-space: nowrap;
+  max-width: 92vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ---- ANIMATIONS ----
+@keyframes mm-pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes mm-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-node,
+  .mm-center,
+  .mm-child,
+  .mm-linkbar,
+  .mm-links,
+  .mm-halo {
+    animation: none;
+  }
+
+  .mm-canvas--animate {
+    transition: none;
+  }
+}

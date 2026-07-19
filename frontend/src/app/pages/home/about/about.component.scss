@@ -1,0 +1,93 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.about {
+  &__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    align-items: center;
+
+    @include lg {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.97rem;
+      line-height: 1.75;
+    }
+  }
+
+  &__title {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    margin-bottom: 4px;
+  }
+
+  &__cta {
+    width: fit-content;
+    margin-top: 8px;
+  }
+}
+
+// ---- JSON CODE CARD ----
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid var(--border);
+  }
+
+  &__dots {
+    display: flex;
+    gap: 6px;
+
+    span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+
+      &:nth-child(1) { background: #ff5f57; }
+      &:nth-child(2) { background: #febb2c; }
+      &:nth-child(3) { background: #28c840; }
+    }
+  }
+
+  &__title {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'Roboto Mono', monospace;
+  }
+
+  &__code {
+    padding: 24px;
+    font-family: 'Roboto Mono', 'Consolas', monospace;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 0;
+    white-space: pre;
+  }
+}
+
+// ---- SYNTAX COLORS ----
+.c-key    { color: #a78bfa; }
+.c-string { color: #63ffb2; }
+.c-bool   { color: #ff63b2; }
+.c-punct  { color: var(--text-muted); }
+.c-bracket { color: var(--accent-2); }

@@ -1,0 +1,98 @@
+@use 'variables' as *;
+
+// ============================================
+// MIXINS RESPONSIVE
+// ============================================
+@mixin sm {
+  @media (min-width: #{$bp-sm}) { @content; }
+}
+@mixin md {
+  @media (min-width: #{$bp-md}) { @content; }
+}
+@mixin lg {
+  @media (min-width: #{$bp-lg}) { @content; }
+}
+@mixin xl {
+  @media (min-width: #{$bp-xl}) { @content; }
+}
+
+// ============================================
+// GLASSMORPHISM
+// ============================================
+@mixin glass($opacity: null, $blur: 20px) {
+  background: var(--glass-bg);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid var(--glass-border);
+}
+
+@mixin glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+
+  &:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-4px);
+  }
+}
+
+// ============================================
+// GRADIENT TEXT
+// ============================================
+@mixin gradient-text($gradient: var(--gradient-text)) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// ============================================
+// FLEX UTILS
+// ============================================
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ============================================
+// BUTTON BASE
+// ============================================
+@mixin btn-base {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  border: none;
+  outline: none;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+// ============================================
+// SECTION LAYOUT
+// ============================================
+@mixin section-padding {
+  padding: 80px 0;
+
+  @include md {
+    padding: 120px 0;
+  }
+}

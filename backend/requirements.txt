@@ -1,0 +1,16 @@
+fastapi>=0.110,<1.0
+uvicorn>=0.27,<1.0
+python-dotenv>=1.0,<2.0
+pydantic>=2.7,<3.0
+pandas>=2.2,<3.0
+numpy>=1.26,<2.0
+chromadb==0.4.24
+sentence-transformers>=3.0,<4.0
+
+# Stack LangChain (orchestration RAG + LLM + reranking + tracing LangSmith)
+langchain>=0.3,<0.4
+langchain-community>=0.3,<0.4
+langchain-mistralai>=0.2,<0.3
+langchain-huggingface>=0.1,<0.3
+langchain-chroma>=0.1.4,<0.2
+langsmith>=0.1

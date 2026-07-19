@@ -11,6 +11,9 @@ class Settings:
     CHROMA_HOST: str = os.getenv("CHROMA_HOST", "chromadb")
     CHROMA_PORT: int = int(os.getenv("CHROMA_PORT", 8000))
 
+    # Rate limiting de l'endpoint /chat (protège les crédits Mistral)
+    CHAT_RATE_LIMIT: str = os.getenv("CHAT_RATE_LIMIT", "10/minute")
+
     # RAG
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
     # Cross-encoder multilingue (corpus FR), léger et rapide sur CPU

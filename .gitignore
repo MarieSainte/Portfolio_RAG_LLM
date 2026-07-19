@@ -14,3 +14,6 @@ dist/
 
 # Résultats d'évaluation
 backend/evals/ragas_results.csv
+
+# Documents personnels
+rapport de conduite.odt

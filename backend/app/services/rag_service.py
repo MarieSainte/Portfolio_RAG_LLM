@@ -1,3 +1,4 @@
+import logging
 import os
 
 import chromadb
@@ -11,6 +12,8 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from app.core.config import settings
+
+logger = logging.getLogger(__name__)
 
 COLLECTION_NAME = "experience_jordan"
 
@@ -52,8 +55,8 @@ class RAGService:
                     collection_name=COLLECTION_NAME,
                     embedding_function=self.embeddings,
                 )
-            except Exception as e:
-                print(f"ChromaDB connection error (HTTP): {e}")
+            except Exception:
+                logger.exception("ChromaDB connection error (HTTP)")
                 self._client = None
                 self._vectorstore = None
         return self._vectorstore
@@ -79,22 +82,23 @@ class RAGService:
 
     def index_csv(self, csv_path: str):
         if self.vectorstore is None:
-            print("ChromaDB client not initialized. Skipping indexing.")
+            logger.warning("ChromaDB client not initialized, skipping indexing")
             return
 
         if not os.path.exists(csv_path):
-            print(f"CSV file not found: {csv_path}")
+            logger.warning("CSV file not found", extra={"context": {"path": csv_path}})
             return
 
         # Only index if collection is empty
         collection = self._client.get_or_create_collection(name=COLLECTION_NAME)
         if collection.count() > 0:
-            print(f"ChromaDB collection already contains {collection.count()} entries. Skipping initial indexing.")
+            logger.info(
+                "collection already populated, skipping indexing",
+                extra={"context": {"count": collection.count()}},
+            )
             return
 
-        print(f"Starting indexing from {csv_path}...")
         df = pd.read_csv(csv_path)
-
         splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
 
         documents = []
@@ -120,12 +124,14 @@ class RAGService:
                 ids.append(f"{project_id}_chunk_{i}")
 
         if not documents:
-            print("No documents to index.")
+            logger.warning("no documents to index")
             return
 
-        print(f"Indexing {len(documents)} chunks from {len(df)} projects...")
         self._vectorstore.add_documents(documents, ids=ids)
-        print(f"Successfully indexed {len(documents)} chunks.")
+        logger.info(
+            "indexing complete",
+            extra={"context": {"chunks": len(documents), "projects": len(df)}},
+        )
 
     def retrieve(self, query_text: str) -> list:
         """Renvoie les Documents les plus pertinents (dense retrieval + reranking)."""
@@ -134,8 +140,8 @@ class RAGService:
             return []
         try:
             return retriever.invoke(query_text)
-        except Exception as e:
-            print(f"Retrieval error: {e}")
+        except Exception:
+            logger.exception("retrieval error")
             return []
 
 

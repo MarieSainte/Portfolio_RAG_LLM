@@ -8,7 +8,13 @@ import { AboutComponent } from './about/about.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TranslateModule, HeroComponent, SoftSkillsComponent, TechSkillsComponent, AboutComponent],
+  imports: [
+    TranslateModule,
+    HeroComponent,
+    SoftSkillsComponent,
+    TechSkillsComponent,
+    AboutComponent,
+  ],
   template: `
     <div class="page-enter">
       <app-hero />

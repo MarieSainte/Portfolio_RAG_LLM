@@ -77,13 +77,17 @@ import { HttpClient } from '@angular/common/http';
                 </div>
                 <div class="robot__ear robot__ear--left"></div>
                 <div class="robot__ear robot__ear--right"></div>
-                
+
                 <!-- Removed Vision Lens (Request: 100% Text) -->
               </div>
               <div class="robot__neck"></div>
               <div class="robot__body">
                 <div class="robot__chest">
-                  <button class="robot__connect-btn" (click)="toggleChat()" [class.robot__connect-btn--active]="isChatActive">
+                  <button
+                    class="robot__connect-btn"
+                    (click)="toggleChat()"
+                    [class.robot__connect-btn--active]="isChatActive"
+                  >
                     <span class="robot__connect-glow"></span>
                     <i class="icon">{{ isChatActive ? '●' : 'Connect' }}</i>
                   </button>
@@ -102,11 +106,13 @@ import { HttpClient } from '@angular/common/http';
                       </div>
                       <button class="chat-close" (click)="toggleChat()">×</button>
                     </div>
-                    
+
                     <div class="chat-messages" #scrollContainer>
                       @for (msg of messages; track $index) {
                         <div class="message" [class.message--user]="msg.sender === 'user'">
-                          <div class="message-bubble">{{ msg.isKey ? (msg.text | translate) : msg.text }}</div>
+                          <div class="message-bubble">
+                            {{ msg.isKey ? (msg.text | translate) : msg.text }}
+                          </div>
                         </div>
                       }
                       @if (isTyping) {
@@ -119,14 +125,23 @@ import { HttpClient } from '@angular/common/http';
                     </div>
 
                     <div class="chat-input-wrapper">
-                      <input [ngModel]="userInput"
-                             (ngModelChange)="userInput = $event"
-                             (keyup.enter)="sendMessage()" 
-                             [placeholder]="'HOME.HERO.CHAT.PLACEHOLDER' | translate"
-                             class="chat-input">
+                      <input
+                        [ngModel]="userInput"
+                        (ngModelChange)="userInput = $event"
+                        (keyup.enter)="sendMessage()"
+                        [placeholder]="'HOME.HERO.CHAT.PLACEHOLDER' | translate"
+                        class="chat-input"
+                      />
                       <button (click)="sendMessage()" class="chat-send">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        <svg
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                        >
+                          <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
                         </svg>
                       </button>
                     </div>
@@ -170,8 +185,8 @@ export class HeroComponent {
   isChatActive = false;
   isTyping = false;
   userInput = '';
-  messages: { text: string, sender: 'user' | 'bot', isKey?: boolean }[] = [
-    { text: 'HOME.HERO.CHAT.WELCOME', sender: 'bot', isKey: true }
+  messages: { text: string; sender: 'user' | 'bot'; isKey?: boolean }[] = [
+    { text: 'HOME.HERO.CHAT.WELCOME', sender: 'bot', isKey: true },
   ];
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
@@ -211,33 +226,33 @@ export class HeroComponent {
 
     this.isTyping = true;
 
-    this.http.post<{ reply: string }>(this.API_URL, { message: userText, history })
-      .subscribe({
-        next: (response) => {
-          this.isTyping = false;
-          this.messages.push({
-            text: response.reply,
-            sender: 'bot'
-          });
-          this.scrollToBottom();
-        },
-        error: (err) => {
-          this.isTyping = false;
-          this.messages.push({
-            text: 'HOME.HERO.CHAT.ERROR',
-            sender: 'bot',
-            isKey: true
-          });
-          console.error('Chat error:', err);
-          this.scrollToBottom();
-        }
-      });
+    this.http.post<{ reply: string }>(this.API_URL, { message: userText, history }).subscribe({
+      next: (response) => {
+        this.isTyping = false;
+        this.messages.push({
+          text: response.reply,
+          sender: 'bot',
+        });
+        this.scrollToBottom();
+      },
+      error: (err) => {
+        this.isTyping = false;
+        this.messages.push({
+          text: 'HOME.HERO.CHAT.ERROR',
+          sender: 'bot',
+          isKey: true,
+        });
+        console.error('Chat error:', err);
+        this.scrollToBottom();
+      },
+    });
   }
 
   private scrollToBottom() {
     setTimeout(() => {
       if (this.scrollContainer) {
-        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+        this.scrollContainer.nativeElement.scrollTop =
+          this.scrollContainer.nativeElement.scrollHeight;
       }
     }, 100);
   }

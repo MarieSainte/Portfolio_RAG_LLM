@@ -26,6 +26,11 @@ jobs:
           pip install torch --index-url https://download.pytorch.org/whl/cpu
           pip install -r requirements-dev.txt
 
+      - name: Lint (ruff)
+        run: |
+          ruff check app tests evals
+          ruff format --check app tests evals
+
       - name: Run pytest
         env:
           MISTRAL_API_KEY: test-key

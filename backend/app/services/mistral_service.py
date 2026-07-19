@@ -1,3 +1,5 @@
+import logging
+
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -6,6 +8,8 @@ from langchain_mistralai import ChatMistralAI
 
 from app.core.config import settings
 from app.services.rag_service import rag_service
+
+logger = logging.getLogger(__name__)
 
 # Nombre max de messages d'historique conservés (évite une croissance illimitée des tokens)
 MAX_HISTORY_MESSAGES = 10
@@ -82,16 +86,14 @@ class MistralService:
                 ("human", "{question}"),
             ]
         )
-        retrieve = RunnableLambda(
-            lambda x: rag_service.retrieve(x["question"])
-        ).with_config(run_name="retrieve_and_rerank")
+        retrieve = RunnableLambda(lambda x: rag_service.retrieve(x["question"])).with_config(
+            run_name="retrieve_and_rerank"
+        )
 
         # Entrée : {question, history}. Sortie : {question, history, docs, context, answer}.
         return (
             RunnablePassthrough.assign(docs=retrieve)
-            | RunnablePassthrough.assign(
-                context=RunnableLambda(lambda x: _format_docs(x["docs"]))
-            )
+            | RunnablePassthrough.assign(context=RunnableLambda(lambda x: _format_docs(x["docs"])))
             | RunnablePassthrough.assign(answer=prompt | llm | StrOutputParser())
         ).with_config(run_name="portfolio_rag")
 
@@ -111,12 +113,10 @@ class MistralService:
         if not chain:
             return "Mistral API Key not configured on backend.", []
         try:
-            output = chain.invoke(
-                {"question": question, "history": _to_lc_messages(history)}
-            )
+            output = chain.invoke({"question": question, "history": _to_lc_messages(history)})
             return output["answer"], [doc.page_content for doc in output["docs"]]
         except Exception as e:
-            print(f"Error calling Mistral API: {str(e)}")
+            logger.exception("error calling Mistral API")
             return f"Error: {str(e)}", []
 
 

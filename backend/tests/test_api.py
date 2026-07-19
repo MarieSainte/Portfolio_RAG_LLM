@@ -57,9 +57,7 @@ def test_chat_rate_limited(client, monkeypatch):
     # Le limiteur est désactivé par les autres tests, son compteur est donc à zéro ici.
     limiter.enabled = True
 
-    statuses = [
-        client.post("/chat", json={"message": "x"}).status_code for _ in range(12)
-    ]
+    statuses = [client.post("/chat", json={"message": "x"}).status_code for _ in range(12)]
     assert 429 in statuses
     # Les premières requêtes passent avant que la limite (10/minute) ne coupe
     assert statuses[0] == 200

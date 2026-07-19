@@ -1,13 +1,18 @@
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from app.core.config import settings
-from app.core.rate_limit import limiter
-from app.controllers.chat_controller import router as chat_router
-import uvicorn
 
+from app.controllers.chat_controller import router as chat_router
+from app.core.config import settings
 from app.core.lifespan import lifespan
+from app.core.logging_config import setup_logging
+from app.core.rate_limit import limiter
+
+# Logs structurés JSON dès le chargement du module
+setup_logging()
+
 
 def create_app() -> FastAPI:
     app = FastAPI(title=settings.PROJECT_NAME, lifespan=lifespan)
@@ -29,6 +34,7 @@ def create_app() -> FastAPI:
     app.include_router(chat_router)
 
     return app
+
 
 app = create_app()
 

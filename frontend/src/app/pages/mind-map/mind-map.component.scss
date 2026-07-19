@@ -61,8 +61,13 @@
 }
 
 @keyframes mm-breathe {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 // ---- LINKS ----
@@ -107,7 +112,9 @@
   @include glass($blur: 16px);
   border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
   border-radius: var(--radius-md);
-  box-shadow: 0 0 50px var(--accent-glow), var(--shadow-md);
+  box-shadow:
+    0 0 50px var(--accent-glow),
+    var(--shadow-md);
   cursor: pointer;
   z-index: 4;
   text-align: center;
@@ -148,8 +155,11 @@
   z-index: 3;
   animation: mm-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
   animation-delay: calc(0.15s + var(--i) * 0.05s);
-  transition: opacity var(--transition-fast), border-color var(--transition-fast),
-    box-shadow var(--transition-fast), background var(--transition-fast);
+  transition:
+    opacity var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background var(--transition-fast);
 
   &__icon {
     @include flex-center;
@@ -265,7 +275,9 @@
   font-size: 0.68rem;
   font-weight: 600;
   color: var(--text-primary);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 
   &:hover {
     border-color: var(--node-color);
@@ -350,8 +362,12 @@
 }
 
 @keyframes mm-fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

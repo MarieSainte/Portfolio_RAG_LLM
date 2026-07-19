@@ -18,7 +18,10 @@
 
   &--scrolled {
     background: var(--bg-primary);
-    background-color: rgba(var(--bg-primary-rgb, 7, 7, 15), 0.85); // Note: ideally we'd have RGB vars
+    background-color: rgba(
+      var(--bg-primary-rgb, 7, 7, 15),
+      0.85
+    ); // Note: ideally we'd have RGB vars
     // Simplified for now to just use the var
     background: var(--bg-primary);
     opacity: 0.98;

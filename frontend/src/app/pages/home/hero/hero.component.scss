@@ -52,7 +52,9 @@
     font-size: clamp(1.8rem, 5vw, 3rem);
     font-weight: 800;
     line-height: 1.1;
-    @include gradient-text(linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-2) 100%));
+    @include gradient-text(
+      linear-gradient(135deg, var(--text-primary) 0%, var(--accent) 50%, var(--accent-2) 100%)
+    );
     opacity: 0;
     animation: fadeInUp 0.7s ease 0.2s forwards;
     white-space: nowrap;
@@ -177,8 +179,7 @@
     position: relative;
     z-index: 10;
     transform-style: preserve-3d;
-    transform:
-      rotateY(calc(var(--mx) * 35deg)) rotateX(calc(var(--my) * -25deg));
+    transform: rotateY(calc(var(--mx) * 35deg)) rotateX(calc(var(--my) * -25deg));
     transition: transform 0.2s ease-out;
   }
 
@@ -256,13 +257,15 @@
     box-shadow:
       0 0 15px var(--accent),
       0 0 40px var(--accent-glow);
-    transform:
-      translate(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 8px)) scaleY(calc(1 - abs(var(--my, 0)) * 0.2));
+    transform: translate(calc(var(--mx, 0) * 12px), calc(var(--my, 0) * 8px))
+      scaleY(calc(1 - abs(var(--my, 0)) * 0.2));
     transition: transform 0.1s ease-out;
 
     :host-context(body.light-mode) & {
       background: #ffffff;
-      box-shadow: 0 0 20px #ffffff, 0 0 40px rgba(255, 255, 255, 0.4);
+      box-shadow:
+        0 0 20px #ffffff,
+        0 0 40px rgba(255, 255, 255, 0.4);
     }
   }
 
@@ -560,7 +563,6 @@
 }
 
 @keyframes typing {
-
   0%,
   80%,
   100% {

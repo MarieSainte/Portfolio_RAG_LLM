@@ -17,6 +17,11 @@ on:
         required: false
         default: ""
 
+# Un seul déploiement à la fois ; annule un run précédent encore en cours
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   IMAGE_BACKEND: ghcr.io/mariesainte/portfolio-backend
   IMAGE_FRONTEND: ghcr.io/mariesainte/portfolio-frontend
@@ -28,6 +33,11 @@ jobs:
     uses: ./.github/workflows/_tests.yml
     secrets: inherit
 
+  frontend:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
+    uses: ./.github/workflows/_frontend.yml
+    secrets: inherit
+
   eval:
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
     needs: tests
@@ -37,7 +47,7 @@ jobs:
   # --- Build + push des images (sauté en cas de rollback) ---
   build-push:
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
-    needs: eval
+    needs: [eval, frontend]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -78,7 +88,9 @@ jobs:
   # --- Déploiement (image épinglée par SHA, ou rollback_sha) ---
   deploy:
     needs: build-push
-    if: ${{ always() && (needs.build-push.result == 'success' || needs.build-push.result == 'skipped') }}
+    # Déploie si le build a réussi, OU si c'est un rollback explicite (build volontairement sauté).
+    # Ne déploie PAS quand le build est sauté à cause d'un gate qualité en échec.
+    if: ${{ always() && (needs.build-push.result == 'success' || (github.event_name == 'workflow_dispatch' && inputs.rollback_sha != '')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

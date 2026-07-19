@@ -1,16 +1,21 @@
-# Contrôles sur Pull Request : tests unitaires puis gate qualité RAG (Ragas)
+# Contrôles sur Pull Request : tests backend, qualité frontend, puis gate qualité RAG
 name: PR Checks
 
 on:
   pull_request:
     paths:
       - "backend/**"
+      - "frontend/**"
       - ".github/workflows/**"
   workflow_dispatch:
 
 jobs:
   tests:
     uses: ./.github/workflows/_tests.yml
+    secrets: inherit
+
+  frontend:
+    uses: ./.github/workflows/_frontend.yml
     secrets: inherit
 
   ragas:

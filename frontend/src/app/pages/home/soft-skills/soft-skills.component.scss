@@ -44,9 +44,10 @@
   &:hover {
     border-color: var(--card-color, var(--accent));
     transform: translateY(-6px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
-                0 0 0 1px var(--card-color, var(--accent)),
-                0 0 30px color-mix(in srgb, var(--card-color) 20%, transparent);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.3),
+      0 0 0 1px var(--card-color, var(--accent)),
+      0 0 30px color-mix(in srgb, var(--card-color) 20%, transparent);
 
     .skill-card__icon {
       transform: scale(1.1) rotate(5deg);

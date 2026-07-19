@@ -22,26 +22,43 @@ import { ThemeService } from '../../core/services/theme.service';
           <!-- Desktop Nav -->
           <ul class="navbar__links" [class.navbar__links--open]="isMenuOpen">
             <li>
-              <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-                 class="navbar__link" (click)="closeMenu()">
+              <a
+                routerLink="/"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="navbar__link"
+                (click)="closeMenu()"
+              >
                 {{ 'NAV.HOME' | translate }}
               </a>
             </li>
             <li>
-              <a routerLink="/projects" routerLinkActive="active"
-                 class="navbar__link" (click)="closeMenu()">
+              <a
+                routerLink="/projects"
+                routerLinkActive="active"
+                class="navbar__link"
+                (click)="closeMenu()"
+              >
                 {{ 'NAV.PROJECTS' | translate }}
               </a>
             </li>
             <li>
-              <a routerLink="/mind-map" routerLinkActive="active"
-                 class="navbar__link" (click)="closeMenu()">
+              <a
+                routerLink="/mind-map"
+                routerLinkActive="active"
+                class="navbar__link"
+                (click)="closeMenu()"
+              >
                 {{ 'NAV.MIND_MAP' | translate }}
               </a>
             </li>
             <li>
-              <a routerLink="/contact" routerLinkActive="active"
-                 class="navbar__link" (click)="closeMenu()">
+              <a
+                routerLink="/contact"
+                routerLinkActive="active"
+                class="navbar__link"
+                (click)="closeMenu()"
+              >
                 {{ 'NAV.CONTACT' | translate }}
               </a>
             </li>
@@ -56,12 +73,24 @@ import { ThemeService } from '../../core/services/theme.service';
             </button>
 
             <!-- Theme Toggle -->
-            <button class="theme-toggle" (click)="themeService.toggleTheme()" [title]="'THEME.TOGGLE' | translate">
-              <span class="theme-toggle__icon" [innerText]="themeService.isDarkMode() ? '🌙' : '☀️'"></span>
+            <button
+              class="theme-toggle"
+              (click)="themeService.toggleTheme()"
+              [title]="'THEME.TOGGLE' | translate"
+            >
+              <span
+                class="theme-toggle__icon"
+                [innerText]="themeService.isDarkMode() ? '🌙' : '☀️'"
+              ></span>
             </button>
 
             <!-- Hamburger Menu -->
-            <button class="hamburger" (click)="toggleMenu()" [class.hamburger--open]="isMenuOpen" aria-label="Menu">
+            <button
+              class="hamburger"
+              (click)="toggleMenu()"
+              [class.hamburger--open]="isMenuOpen"
+              aria-label="Menu"
+            >
               <span></span>
               <span></span>
               <span></span>
@@ -71,7 +100,11 @@ import { ThemeService } from '../../core/services/theme.service';
       </div>
 
       <!-- Mobile overlay -->
-      <div class="navbar__overlay" [class.navbar__overlay--show]="isMenuOpen" (click)="closeMenu()"></div>
+      <div
+        class="navbar__overlay"
+        [class.navbar__overlay--show]="isMenuOpen"
+        (click)="closeMenu()"
+      ></div>
     </nav>
   `,
   styleUrl: './navbar.component.scss',
@@ -83,8 +116,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private translate: TranslateService,
-    public themeService: ThemeService
-  ) { }
+    public themeService: ThemeService,
+  ) {}
 
   ngOnInit(): void {
     this.currentLang = localStorage.getItem('lang') || 'fr';

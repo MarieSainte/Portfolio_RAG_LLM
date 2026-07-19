@@ -19,17 +19,19 @@ import { ThemeService } from './core/services/theme.service';
     </main>
     <app-footer />
   `,
-  styles: [`
-    .main-content {
-      min-height: 100vh;
-      padding-top: var(--navbar-height);
-    }
-  `],
+  styles: [
+    `
+      .main-content {
+        min-height: 100vh;
+        padding-top: var(--navbar-height);
+      }
+    `,
+  ],
 })
 export class App implements OnInit {
   constructor(
     private translate: TranslateService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
   ) {}
 
   ngOnInit(): void {

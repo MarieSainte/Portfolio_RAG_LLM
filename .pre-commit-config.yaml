@@ -1,0 +1,17 @@
+# Hooks qualité lancés automatiquement à chaque commit.
+# Installation : pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.1
+    hooks:
+      - id: ruff          # lint Python (+ autofix)
+        args: [--fix]
+        files: ^backend/
+      - id: ruff-format   # formatage Python
+        files: ^backend/
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier      # formatage frontend (Angular/TS/SCSS/HTML)
+        files: ^frontend/src/

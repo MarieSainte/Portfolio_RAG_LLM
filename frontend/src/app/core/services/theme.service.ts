@@ -1,7 +1,7 @@
 import { Injectable, signal, effect } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeService {
   private readonly THEME_KEY = 'portfolio-theme';
@@ -21,7 +21,7 @@ export class ThemeService {
   }
 
   toggleTheme() {
-    this.isDarkMode.update(dark => !dark);
+    this.isDarkMode.update((dark) => !dark);
   }
 
   private getInitialTheme(): boolean {

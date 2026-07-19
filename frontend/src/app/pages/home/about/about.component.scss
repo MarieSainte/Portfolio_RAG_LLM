@@ -62,9 +62,15 @@
       height: 10px;
       border-radius: 50%;
 
-      &:nth-child(1) { background: #ff5f57; }
-      &:nth-child(2) { background: #febb2c; }
-      &:nth-child(3) { background: #28c840; }
+      &:nth-child(1) {
+        background: #ff5f57;
+      }
+      &:nth-child(2) {
+        background: #febb2c;
+      }
+      &:nth-child(3) {
+        background: #28c840;
+      }
     }
   }
 
@@ -86,8 +92,18 @@
 }
 
 // ---- SYNTAX COLORS ----
-.c-key    { color: #a78bfa; }
-.c-string { color: #63ffb2; }
-.c-bool   { color: #ff63b2; }
-.c-punct  { color: var(--text-muted); }
-.c-bracket { color: var(--accent-2); }
+.c-key {
+  color: #a78bfa;
+}
+.c-string {
+  color: #63ffb2;
+}
+.c-bool {
+  color: #ff63b2;
+}
+.c-punct {
+  color: var(--text-muted);
+}
+.c-bracket {
+  color: var(--accent-2);
+}

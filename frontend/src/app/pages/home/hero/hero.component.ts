@@ -159,7 +159,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HeroComponent {
   private http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:8000/chat';
+  // URL relative : servie par le proxy nginx (/api -> backend) en prod,
+  // et par le proxy de dev Angular (proxy.conf.json) en local.
+  private readonly API_URL = '/api/chat';
 
   mouseX = 0;
   mouseY = 0;

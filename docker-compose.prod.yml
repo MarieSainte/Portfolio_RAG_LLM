@@ -1,6 +1,7 @@
 # Déploiement serveur : images pré-buildées par la CI (ghcr.io), aucun build local.
 # Utilisé par le workflow .github/workflows/deploy.yml
-# Lancement manuel sur le serveur : docker compose -f docker-compose.prod.yml up -d
+# IMAGE_TAG (défini dans .env par la CI) épingle la version déployée -> rollback possible.
+# Lancement manuel : IMAGE_TAG=<sha> docker compose -f docker-compose.prod.yml up -d
 
 services:
   chromadb:
@@ -13,36 +14,62 @@ services:
       - ANONYMIZED_TELEMETRY=FALSE
     networks:
       - portfolio_net
+    deploy:
+      resources:
+        limits:
+          memory: 1500m
 
   backend:
-    image: ghcr.io/mariesainte/portfolio-backend:latest
+    image: ghcr.io/mariesainte/portfolio-backend:${IMAGE_TAG:-latest}
     container_name: portfolio_backend
     restart: unless-stopped
     depends_on:
-      - chromadb
+      chromadb:
+        condition: service_started
     environment:
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
+      - CHAT_RATE_LIMIT=${CHAT_RATE_LIMIT:-10/minute}
       - LANGSMITH_TRACING=${LANGSMITH_TRACING:-false}
       - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-https://api.smith.langchain.com}
       - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
       - LANGSMITH_PROJECT=${LANGSMITH_PROJECT:-portfolio-chatbot}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
     networks:
       - portfolio_net
+    deploy:
+      resources:
+        limits:
+          memory: 3g
 
   frontend:
-    image: ghcr.io/mariesainte/portfolio-frontend:latest
+    image: ghcr.io/mariesainte/portfolio-frontend:${IMAGE_TAG:-latest}
     container_name: portfolio_frontend
     restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     # Seul port exposé : le frontend nginx sert l'app et proxifie /api vers le backend
     ports:
       - "8080:80"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
     networks:
       - portfolio_net
+    deploy:
+      resources:
+        limits:
+          memory: 256m
 
 networks:
   portfolio_net:

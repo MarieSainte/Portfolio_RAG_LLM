@@ -195,13 +195,23 @@ export class HeroComponent {
     if (!this.userInput.trim()) return;
 
     const userText = this.userInput;
+
+    // Historique de la conversation avant le nouveau message (on exclut les
+    // messages "clés" de traduction : accueil, erreurs — ce ne sont pas du contenu réel).
+    const history = this.messages
+      .filter((m) => !m.isKey)
+      .map((m) => ({
+        role: m.sender === 'user' ? 'user' : 'assistant',
+        content: m.text,
+      }));
+
     this.messages.push({ text: userText, sender: 'user' });
     this.userInput = '';
     this.scrollToBottom();
 
     this.isTyping = true;
 
-    this.http.post<{ reply: string }>(this.API_URL, { message: userText })
+    this.http.post<{ reply: string }>(this.API_URL, { message: userText, history })
       .subscribe({
         next: (response) => {
           this.isTyping = false;

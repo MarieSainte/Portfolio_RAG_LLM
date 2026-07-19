@@ -1,7 +1,7 @@
 # Portfolio RAG — Chatbot IA
 
 [![Build & Deploy](https://github.com/MarieSainte/Portfolio_RAG_LLM/actions/workflows/deploy.yml/badge.svg)](https://github.com/MarieSainte/Portfolio_RAG_LLM/actions/workflows/deploy.yml)
-[![RAG Evaluation (Ragas)](https://github.com/MarieSainte/Portfolio_RAG_LLM/actions/workflows/rag-eval.yml/badge.svg)](https://github.com/MarieSainte/Portfolio_RAG_LLM/actions/workflows/rag-eval.yml)
+[![PR Checks](https://github.com/MarieSainte/Portfolio_RAG_LLM/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/MarieSainte/Portfolio_RAG_LLM/actions/workflows/pr-checks.yml)
 
 Portfolio interactif d'ingénieur IA doté d'un **chatbot RAG** (Retrieval-Augmented Generation) capable de répondre aux recruteurs à partir d'une base de projets réels — avec citations et **zéro hallucination**. Pipeline de retrieval à deux étages (recherche dense + reranking cross-encoder), génération via Mistral AI, orchestration **LangChain**, et une **CI/CD** complète (build → gate qualité **Ragas** → déploiement).
 
@@ -9,13 +9,13 @@ Portfolio interactif d'ingénieur IA doté d'un **chatbot RAG** (Retrieval-Augme
 
 ## ✨ Fonctionnalités
 
-- **Chatbot RAG** ancré sur les données : recherche sémantique dans les projets, réponses sourcées avec liens GitHub.
+- **Chatbot RAG multi-tours** ancré sur les données : recherche sémantique, mémoire de conversation, réponses sourcées avec liens GitHub.
 - **Retrieval à deux étages** : recherche dense (ChromaDB) élargie, puis **reranking cross-encoder multilingue** sur CPU pour la précision.
 - **Orchestration LangChain** (LCEL) entièrement traçable via **LangSmith**.
 - **Évaluation automatisée** avec **Ragas** (faithfulness, context precision/recall, answer relevancy) en **gate bloquante** de CI.
-- **Rate-limiting** de l'API pour protéger les crédits LLM.
+- **Tests unitaires** (pytest) et **rate-limiting** de l'API pour protéger les crédits LLM.
 - **Frontend Angular 21** bilingue (i18n FR/EN), thème clair/sombre.
-- **Déploiement continu** : images Docker publiées sur GHCR, déployées par SSH.
+- **Déploiement continu robuste** : gate tests + qualité → images Docker sur GHCR (épinglées par SHA) → déploiement SSH avec healthchecks et **rollback**.
 
 ## 🏗️ Architecture
 
@@ -73,10 +73,16 @@ Note la chaîne RAG sur un jeu de questions de référence. La CI **échoue** si
 
 ## 🔄 CI/CD (GitHub Actions)
 
-| Workflow | Déclencheur | Rôle |
+Workflows réutilisables ([`_tests.yml`](.github/workflows/_tests.yml), [`_ragas.yml`](.github/workflows/_ragas.yml)) partagés entre les PR et le déploiement (DRY) :
+
+| Workflow | Déclencheur | Pipeline |
 |---|---|---|
-| [`rag-eval.yml`](.github/workflows/rag-eval.yml) | push / PR sur `backend/` | Gate qualité RAG (Ragas) |
-| [`deploy.yml`](.github/workflows/deploy.yml) | push sur `main` | Build + push images GHCR → déploiement SSH |
+| [`pr-checks.yml`](.github/workflows/pr-checks.yml) | Pull Request | tests (pytest) → gate Ragas |
+| [`deploy.yml`](.github/workflows/deploy.yml) | push sur `main` | tests → gate Ragas → build+push GHCR → déploiement SSH → healthcheck |
+
+- **Déploiement gaté** : on ne build/déploie que si les tests **et** la qualité RAG passent.
+- **Images épinglées par SHA** + healthchecks compose → déploiement traçable et vérifié.
+- **Rollback** : `deploy.yml` en `workflow_dispatch` avec l'entrée `rollback_sha` redéploie une image antérieure sans rebuild.
 
 Secrets requis : `MISTRAL_API_KEY`, `SSH_PRIVATE_KEY`, `SERVER_HOST`, `SERVER_USER` (+ `LANGSMITH_API_KEY` optionnel).
 

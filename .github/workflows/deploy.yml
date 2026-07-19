@@ -8,21 +8,42 @@ on:
       - "frontend/**"
       - "docker-compose.prod.yml"
       - ".github/workflows/deploy.yml"
+      - ".github/workflows/_tests.yml"
+      - ".github/workflows/_ragas.yml"
   workflow_dispatch:
+    inputs:
+      rollback_sha:
+        description: "SHA d'une image déjà publiée à redéployer (rollback). Vide = build normal."
+        required: false
+        default: ""
 
 env:
   IMAGE_BACKEND: ghcr.io/mariesainte/portfolio-backend
   IMAGE_FRONTEND: ghcr.io/mariesainte/portfolio-frontend
 
 jobs:
+  # --- Gates qualité (sautées en cas de rollback) ---
+  tests:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
+    uses: ./.github/workflows/_tests.yml
+    secrets: inherit
+
+  eval:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
+    needs: tests
+    uses: ./.github/workflows/_ragas.yml
+    secrets: inherit
+
+  # --- Build + push des images (sauté en cas de rollback) ---
   build-push:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
+    needs: eval
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
       - uses: actions/checkout@v4
-
       - uses: docker/setup-buildx-action@v3
 
       - name: Login to GHCR
@@ -54,12 +75,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # --- Déploiement (image épinglée par SHA, ou rollback_sha) ---
   deploy:
     needs: build-push
+    if: ${{ always() && (needs.build-push.result == 'success' || needs.build-push.result == 'skipped') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: read
+    env:
+      IMAGE_TAG: ${{ inputs.rollback_sha || github.sha }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,9 +97,11 @@ jobs:
       - name: Prepare .env
         run: |
           cat > .env.deploy <<EOF
+          IMAGE_TAG=${{ env.IMAGE_TAG }}
           MISTRAL_API_KEY=${{ secrets.MISTRAL_API_KEY }}
           MISTRAL_MODEL=mistral-medium-latest
-          LANGSMITH_TRACING=${{ secrets.LANGSMITH_TRACING || 'false' }}
+          CHAT_RATE_LIMIT=10/minute
+          LANGSMITH_TRACING=${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}
           LANGSMITH_API_KEY=${{ secrets.LANGSMITH_API_KEY }}
           LANGSMITH_PROJECT=portfolio-chatbot
           EOF
@@ -91,6 +118,7 @@ jobs:
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
             set -e
             cd ~/portfolio
+            echo 'Déploiement du tag: ${{ env.IMAGE_TAG }}'
             echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
@@ -100,7 +128,9 @@ jobs:
 
       - name: Health check
         run: |
-          sleep 10
+          sleep 15
           ssh -i ~/.ssh/id_deploy -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-            curl -sf http://localhost:8080/ >/dev/null && echo 'Frontend OK' || (echo 'Frontend KO' && exit 1)
+            set -e
+            curl -sf http://localhost:8080/ >/dev/null && echo 'Frontend OK'
+            curl -sf http://localhost:8080/api/health >/dev/null && echo 'API OK'
           "

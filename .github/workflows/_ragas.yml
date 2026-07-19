@@ -1,16 +1,8 @@
-name: RAG Evaluation (Ragas)
+# Workflow réutilisable : gate qualité RAG (Ragas)
+name: Reusable — Ragas eval
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "backend/**"
-      - ".github/workflows/rag-eval.yml"
-  pull_request:
-    paths:
-      - "backend/**"
-      - ".github/workflows/rag-eval.yml"
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   ragas-eval:

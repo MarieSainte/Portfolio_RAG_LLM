@@ -134,7 +134,7 @@ jobs:
           cat > .env.deploy <<EOF
           IMAGE_TAG=${{ env.IMAGE_TAG }}
           MISTRAL_API_KEY=${{ secrets.MISTRAL_API_KEY }}
-          MISTRAL_MODEL=mistral-medium-latest
+          MISTRAL_MODEL=mistral-small-latest
           CHAT_RATE_LIMIT=10/minute
           CHUNK_SIZE=${{ vars.CHUNK_SIZE || '500' }}
           CHUNK_OVERLAP=${{ vars.CHUNK_OVERLAP || '50' }}

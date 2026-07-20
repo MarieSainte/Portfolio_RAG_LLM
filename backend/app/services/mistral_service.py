@@ -12,7 +12,7 @@ from app.services.rag_service import rag_service
 logger = logging.getLogger(__name__)
 
 # Nombre max de messages d'historique conservés
-MAX_HISTORY_MESSAGES = 10
+MAX_HISTORY_MESSAGES = 8
 
 SYSTEM_TEMPLATE = """Tu es l'assistant IA de Jordan, un futur Ingénieur IA LLM et Automatisation basé à Paris. Ton objectif est de vendre le profil de Jordan auprès des recruteurs qui visitent son portfolio.
 

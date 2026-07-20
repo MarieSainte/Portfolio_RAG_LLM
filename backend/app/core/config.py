@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     # du même nom (sinon la valeur par défaut ci-dessous s'applique).
     PROJECT_NAME: str = "Chatbot Backend (Mistral AI + LangChain)"
     MISTRAL_API_KEY: str | None = None
-    MISTRAL_MODEL: str = "mistral-medium-latest"
+    MISTRAL_MODEL: str = "mistral-small-latest"
     CORS_ORIGINS: list[str] = ["http://localhost:4200", "http://localhost:8080"]
     CHROMA_HOST: str = "chromadb"
     CHROMA_PORT: int = 8000
@@ -26,9 +26,9 @@ class Settings(BaseSettings):
     EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
     # Cross-encoder multilingue (corpus FR), léger et rapide sur CPU
     RERANKER_MODEL: str = "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1"
-    RETRIEVER_K: int = 10  # candidats denses (Chroma) avant reranking
-    LEXICAL_K: int = 10  # candidats lexicaux (SQLite FTS5, BM25) avant reranking
-    RERANK_TOP_N: int = 5  # contextes gardés après reranking (fusion dense + lexical)
+    RETRIEVER_K: int = 4  # candidats denses (Chroma) avant reranking
+    LEXICAL_K: int = 4  # candidats lexicaux (SQLite FTS5, BM25) avant reranking
+    RERANK_TOP_N: int = 2  # contextes gardés après reranking (fusion dense + lexical)
     # Découpage des documents avant indexation. Configurable par variable d'env
     # (CHUNK_SIZE / CHUNK_OVERLAP) pour expérimenter différentes tailles de chunk.
     # NB : changer ces valeurs n'a d'effet que sur un index reconstruit (collection vide).

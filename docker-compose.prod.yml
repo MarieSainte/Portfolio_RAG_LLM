@@ -40,7 +40,7 @@ services:
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
-      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
+      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-small-latest}
       - CHAT_RATE_LIMIT=${CHAT_RATE_LIMIT:-10/minute}
       # Découpage des documents (expérimentation de chunk size). L'index est
       # reconstruit à chaque déploiement (voir deploy.yml : down -v).
@@ -140,10 +140,11 @@ services:
       - GF_AUTH_ANONYMOUS_ENABLED=false
       - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
-    # Publié sur la loopback du serveur uniquement : accès via tunnel SSH
-    # (ssh -L 3000:localhost:3000 serveur), aucune surface publique.
+    # Publié sur la loopback du serveur uniquement : accès via tunnel SSH.
+    # Port hôte 3001 (le 3000 est déjà pris par une autre app sur ce serveur).
+    # Tunnel côté PC : ssh -L 3000:localhost:3001 <user>@<host>  puis http://localhost:3000
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3001:3000"
     volumes:
       - ./logging/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./logging/grafana/dashboards:/var/lib/grafana/dashboards:ro

@@ -86,5 +86,17 @@
   {
     "question": "Est-ce que Jordan sait construire des API backend ?",
     "reference": "Oui, il utilise beaucoup FastAPI, un framework Python moderne pour créer des API rapides. On le retrouve dans la majorité de ses projets : le scoring de crédit, le coach d'échecs, le chatbot de triage médical, Futurisys, l'agent lunaire et le chatbot de ce portfolio. Il y associe généralement la validation des données avec Pydantic et une base PostgreSQL."
+  },
+  {
+    "question": "Hi! Can you introduce Jordan in a few words?",
+    "reference": "Jordan is an AI & LLM engineer based in Paris. His portfolio brings together around a dozen hands-on projects spanning the whole AI stack: RAG chatbots (medical triage, chess, cultural events, this portfolio), language-model fine-tuning, computer vision (medical imaging, fashion), reinforcement learning, data engineering, and a mobile cognitive-games app. Several projects were deployed to production with CI/CD pipelines, monitoring and Docker containerization."
+  },
+  {
+    "question": "Has Jordan already deployed models to production?",
+    "reference": "Yes, it is one of his strengths. Several projects reached production: the credit-scoring system (deployed on Hugging Face Spaces with monitoring), the medical triage chatbot (automated SSH deployment with rollback), Futurisys (a production prediction API) and Neurova. He relies on Docker containerization, CI/CD pipelines with GitHub Actions, and monitoring with Prometheus and Grafana."
+  },
+  {
+    "question": "Tell me about the medical triage chatbot project.",
+    "reference": "It is a bilingual (French/English) conversational assistant that helps triage medical emergencies. You describe symptoms in natural language and it returns an urgency level — High, Medium or Low — with a justification, or asks a clarifying question when information is missing. Jordan led the project end to end: GDPR-compliant data preparation and anonymization, model training and automated deployment. The system reaches 100% recall on the most critical emergencies and 90% precision, with responses in under two seconds."
   }
 ]

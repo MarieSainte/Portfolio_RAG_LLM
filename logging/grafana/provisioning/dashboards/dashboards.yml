@@ -1,0 +1,12 @@
+# Charge automatiquement les dashboards JSON du dossier monté.
+apiVersion: 1
+
+providers:
+  - name: 'Chatbot'
+    orgId: 1
+    folder: 'Chatbot'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards

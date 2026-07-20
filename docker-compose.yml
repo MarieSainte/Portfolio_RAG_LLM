@@ -25,11 +25,26 @@ services:
       - "8000:8000"
     depends_on:
       - chromadb
+      - fluentd
+    # Envoie les logs (stdout JSON) vers Fluentd. fluentd-async évite que le
+    # conteneur bloque si Fluentd n'est pas encore prêt au démarrage.
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async: "true"
+        tag: "backend"
     environment:
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
+      # Découpage des documents avant indexation (test de différentes tailles de chunk).
+      - CHUNK_SIZE=${CHUNK_SIZE:-500}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-50}
+      # Journalisation des interactions (SQLite + FTS5). ADMIN_TOKEN vide -> admin désactivé.
+      # La base vit dans /app/data, persistée via le montage ./backend:/app ci-dessous.
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
       # Observabilité LangSmith (optionnel — tracing auto des chaînes LangChain)
       - LANGSMITH_TRACING=${LANGSMITH_TRACING:-false}
       - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-https://api.smith.langchain.com}
@@ -53,9 +68,61 @@ services:
     networks:
       - chatbot_net
 
+  # --- Stack d'observabilité des logs : Fluentd -> Loki -> Grafana ---
+
+  fluentd:
+    build:
+      context: ./logging/fluentd
+      dockerfile: Dockerfile
+    container_name: chatbot_fluentd
+    restart: unless-stopped
+    volumes:
+      - ./logging/fluentd/conf:/fluentd/etc
+    # Port exposé sur l'hôte : le driver de logs Docker s'y connecte.
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    depends_on:
+      - loki
+    networks:
+      - chatbot_net
+
+  loki:
+    image: grafana/loki:2.9.8
+    container_name: chatbot_loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yml
+    volumes:
+      - ./logging/loki/loki-config.yml:/etc/loki/local-config.yml:ro
+      - loki_data:/loki
+    networks:
+      - chatbot_net
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: chatbot_grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      # Accès direct sans login pour la démo locale (à durcir en prod).
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    volumes:
+      - ./logging/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./logging/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - loki
+    networks:
+      - chatbot_net
+
 networks:
   chatbot_net:
     driver: bridge
 
 volumes:
   chroma_data:
+  loki_data:
+  grafana_data:

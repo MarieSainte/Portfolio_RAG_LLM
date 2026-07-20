@@ -1,0 +1,11 @@
+# Datasource Loki auto-provisionnée : Grafana sait lire les logs dès le démarrage.
+apiVersion: 1
+
+datasources:
+  - name: Loki
+    uid: loki
+    type: loki
+    access: proxy
+    url: http://loki:3100
+    isDefault: true
+    editable: true

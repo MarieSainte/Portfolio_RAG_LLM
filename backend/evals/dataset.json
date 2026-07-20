@@ -1,26 +1,90 @@
 [
   {
-    "question": "Parle-moi du projet de chatbot de triage médical de Jordan.",
-    "reference": "Jordan a conçu un POC de chatbot bilingue (FR/EN) de triage des urgences médicales : dataset de 4 771 exemples SFT et 500 paires DPO anonymisées (Presidio, spaCy, RGPD), fine-tuning de Qwen3-1.7B-Base en QLoRA 4-bit avec Unsloth et TRL (SFT puis DPO), serving vLLM avec une latence P95 de 1,8 s, API FastAPI avec PostgreSQL, CI/CD GitHub Actions avec gate d'évaluation bloquante (rappel urgence Haute >= 0.90) et monitoring Prometheus/Grafana. Résultats : rappel urgence Haute 100 %, accuracy 90 %."
+    "question": "Bonjour ! Pouvez-vous me présenter Jordan en quelques mots ?",
+    "reference": "Jordan est ingénieur IA & LLM. Son portfolio réunit une dizaine de projets qui couvrent toute la chaîne de l'intelligence artificielle : des chatbots basés sur du RAG (triage médical, échecs, événements culturels, ce portfolio lui-même), du fine-tuning de modèles de langage, de la vision par ordinateur (imagerie médicale, mode), du reinforcement learning, du data engineering, et même une application mobile de jeux cognitifs. Plusieurs de ces projets ont été déployés en production avec des pipelines CI/CD, du monitoring et de la conteneurisation Docker."
   },
   {
-    "question": "Quelles technologies ont été utilisées dans le projet d'échecs pour la FFE ?",
-    "reference": "Le FFE Chess Agent utilise Python et FastAPI côté backend, LangGraph et LangChain pour l'orchestration agentique, Milvus comme base vectorielle pour le RAG, MongoDB pour l'historique, le moteur Stockfish et l'API Lichess pour l'analyse des ouvertures, l'API YouTube pour les recommandations vidéo, et Angular avec chess.js et Chessground côté frontend, le tout conteneurisé avec Docker et Docker Compose."
+    "question": "Quels sont les projets les plus marquants de Jordan ?",
+    "reference": "Parmi les projets les plus aboutis : le chatbot de triage médical (un modèle de langage fine-tuné et déployé de bout en bout, avec une évaluation bloquante pour la sécurité patient), le coach d'échecs agentique pour la Fédération Française des Échecs, le système de scoring de crédit déployé en production avec du monitoring complet, et Neurova, une application mobile de jeux cognitifs développée en solo. Il a aussi construit plusieurs chatbots RAG, dont celui de ce portfolio."
   },
   {
-    "question": "Jordan a-t-il de l'expérience en fine-tuning de LLM ?",
-    "reference": "Oui. Dans le projet de chatbot de triage médical, Jordan a fine-tuné Qwen3-1.7B-Base en QLoRA 4-bit (LoRA r=16) avec Unsloth et TRL sur un GPU 6 Go : SFT sur 1 400 steps puis alignement DPO, avec tracking MLflow. Jordan a aussi corrigé un bug d'arrêt de génération par chirurgie d'embeddings des tokens ChatML, faisant passer l'arrêt EOS de 0 % à 100 %."
+    "question": "Parlez-moi du projet de chatbot de triage médical.",
+    "reference": "C'est un assistant conversationnel bilingue (français/anglais) qui aide à trier les urgences médicales. On lui décrit des symptômes en langage naturel et il répond avec un niveau d'urgence — Haute, Moyenne ou Faible — accompagné d'une justification, ou pose une question de clarification quand il manque des informations. Jordan a mené le projet de bout en bout : préparation et anonymisation des données pour respecter le RGPD, entraînement du modèle, mise en service et déploiement automatisé. Le système atteint 100 % de rappel sur les urgences les plus graves et 90 % de précision, avec une réponse en moins de deux secondes."
   },
   {
-    "question": "Quels projets de Jordan démontrent des compétences MLOps et CI/CD ?",
-    "reference": "Plusieurs projets : le système de scoring de crédit (monitoring de dérive avec Evidently AI, Prometheus, Grafana, logs Fluentd/Elasticsearch, CI/CD GitHub Actions vers Hugging Face Spaces), le chatbot de triage médical (CI/CD GitHub Actions avec gate d'évaluation bloquante, images ghcr.io, déploiement SSH automatisé, rollback par tag), Futurisys (tests Pytest et pipeline CI/CD) et Neurova (build Docker, push ghcr.io, déploiement automatisé)."
+    "question": "Jordan a-t-il déjà entraîné ou affiné ses propres modèles de langage ?",
+    "reference": "Oui. Pour le chatbot de triage médical, Jordan a affiné (fine-tuné) le modèle Qwen3-1.7B en utilisant une technique légère (QLoRA en 4 bits avec les outils Unsloth et TRL) qui lui a permis de travailler sur un simple GPU de 6 Go. L'entraînement s'est fait en deux temps : d'abord un apprentissage supervisé, puis un alignement sur des préférences (DPO). Il a aussi résolu un bug délicat où le modèle ne savait plus s'arrêter de générer, en corrigeant directement les embeddings de certains tokens, ce qui a fait passer l'arrêt correct de 0 % à 100 %."
   },
   {
-    "question": "Qu'est-ce que Neurova ?",
-    "reference": "Neurova est une application mobile d'entraînement cérébral développée en solo par Jordan, dont la sortie est prévue le 1er août 2026 sur Android et iOS : 11 jeux cognitifs solo répartis en 4 modules (Mémoire, Spatial, Mots, Logique) et 4 jeux multijoueur en temps réel à 2 joueurs via WebSocket. Développée en Flutter/Dart avec un backend temps réel serveur-autoritatif en Rust (Axum, Tokio, SeaORM), PostgreSQL et Redis, monétisée via Google AdMob et un abonnement premium."
+    "question": "Est-ce que Jordan sait déployer des modèles en production ?",
+    "reference": "Oui, c'est une de ses forces. Plusieurs de ses projets sont allés jusqu'à la production : le système de scoring de crédit (déployé sur Hugging Face Spaces avec du monitoring), le chatbot de triage médical (déploiement automatisé par SSH avec possibilité de revenir en arrière), Futurisys (API de prédiction en production) et Neurova. Il s'appuie sur la conteneurisation Docker, des pipelines CI/CD avec GitHub Actions, et du monitoring avec Prometheus et Grafana."
   },
   {
-    "question": "Jordan a-t-il déjà évalué la qualité d'un système RAG ?",
-    "reference": "Oui. Pour le chatbot Puls-Events (recommandation d'événements culturels), Jordan a utilisé le framework Ragas (LLM-as-a-judge) afin de mesurer la faithfulness, la context precision, le context recall et l'answer relevancy, avec un dataset de test dédié (test_cases.json), atteignant une précision de contexte de 1.0 sur les tests de référence."
+    "question": "Qu'est-ce que le projet Neurova ?",
+    "reference": "Neurova est une application mobile d'entraînement cérébral que Jordan a développée seul, dont la sortie est prévue le 1er août 2026 sur Android et iOS. Elle propose 11 jeux cognitifs en solo répartis en quatre thèmes (Mémoire, Spatial, Mots, Logique) et 4 jeux multijoueur en temps réel à deux joueurs. L'application est faite en Flutter, avec un serveur temps réel en Rust qui garde la main sur la logique des parties. Elle est monétisée par la publicité et un abonnement premium."
+  },
+  {
+    "question": "Jordan a-t-il de l'expérience en vision par ordinateur ?",
+    "reference": "Oui. Avec BrainScanAI, il a classé des IRM cérébrales pour détecter des tumeurs, en comparant une approche classique et un réseau de neurones convolutif (CNN) entraîné avec PyTorch. Avec Fashion Trend AI, il a fait de la segmentation de vêtements sur des photos de mode en s'appuyant sur des modèles pré-entraînés de Hugging Face. Ces projets couvrent aussi bien l'imagerie médicale que des cas d'usage grand public."
+  },
+  {
+    "question": "Comment Jordan s'assure-t-il de la qualité de ses chatbots ?",
+    "reference": "Il évalue ses systèmes RAG de façon quantitative avec le framework Ragas, qui utilise un modèle de langage comme juge pour mesurer des critères comme la fidélité aux sources, la précision et le rappel du contexte, et la pertinence des réponses. Il l'a utilisé sur le chatbot Puls-Events, et sur le chatbot de triage médical il a même mis en place une évaluation bloquante dans la CI/CD : si la qualité descend sous un seuil, le déploiement est stoppé."
+  },
+  {
+    "question": "Jordan a-t-il déjà travaillé sur un projet dans le domaine bancaire ou financier ?",
+    "reference": "Oui, il a développé un système de scoring de crédit de bout en bout : un modèle qui prédit le risque de crédit pour aider à automatiser les décisions. Le modèle a été entraîné avec XGBoost puis optimisé pour être rapide en production. Le projet inclut une API, un tableau de bord pour les agents de crédit, et surtout une infrastructure de monitoring solide qui surveille la dérive des données et la performance du modèle dans le temps."
+  },
+  {
+    "question": "Est-ce que Jordan a de l'expérience en data engineering ?",
+    "reference": "Oui. Avec CheckItAI, il a construit un pipeline de données automatisé qui collecte des articles (texte et image) depuis des sources d'actualité comme la BBC ou The Guardian, les normalise dans un format commun et les stocke dans PostgreSQL. La collecte est orchestrée par Airflow toutes les dix minutes, et un tableau de bord suit des indicateurs comme la qualité des données et le taux d'erreurs."
+  },
+  {
+    "question": "Sur quels projets Jordan a-t-il utilisé l'IA générative et les LLM ?",
+    "reference": "Plusieurs : le chatbot de triage médical (où il a fine-tuné son propre modèle), le coach d'échecs de la FFE (un agent construit avec LangGraph), le chatbot Puls-Events pour les événements culturels, et le chatbot de ce portfolio. Ces projets utilisent du RAG pour ancrer les réponses dans des données réelles et éviter les hallucinations, avec des modèles comme Mistral AI."
+  },
+  {
+    "question": "Jordan connaît-il le reinforcement learning ?",
+    "reference": "Oui. Il a entraîné un agent de reinforcement learning capable de faire atterrir un module lunaire dans l'environnement de simulation LunarLander, en utilisant la bibliothèque Stable-Baselines3. Il a suivi l'apprentissage avec TensorBoard et généré des vidéos des épisodes pour analyser le comportement de l'agent, puis rendu le tout accessible via une API et des interfaces de visualisation."
+  },
+  {
+    "question": "Quelles bases de données vectorielles Jordan a-t-il déjà utilisées ?",
+    "reference": "Il en a utilisé plusieurs selon les projets : ChromaDB pour le chatbot de ce portfolio, Milvus pour le coach d'échecs de la FFE, et FAISS pour le chatbot Puls-Events. Ces bases servent à retrouver rapidement les informations les plus pertinentes dans une architecture RAG."
+  },
+  {
+    "question": "Jordan a-t-il déjà développé une application mobile ?",
+    "reference": "Oui, avec Neurova, une application d'entraînement cérébral développée en solo pour Android et iOS, prévue pour le 1er août 2026. Elle est réalisée en Flutter côté mobile, avec un backend temps réel en Rust pour gérer les parties multijoueur. Le projet va du gameplay jusqu'à la monétisation (publicités et abonnement premium) et au déploiement."
+  },
+  {
+    "question": "Est-ce que Jordan maîtrise Docker et les pipelines CI/CD ?",
+    "reference": "Oui, c'est présent dans la plupart de ses projets. Il conteneurise ses applications avec Docker et Docker Compose, et automatise les tests et les déploiements avec GitHub Actions. Sur le chatbot de triage médical par exemple, la CI/CD construit les images, les publie, déploie automatiquement le serveur et permet de revenir à une version précédente en cas de problème."
+  },
+  {
+    "question": "Parlez-moi du chatbot de recommandation d'événements culturels.",
+    "reference": "Puls-Events est un assistant conversationnel qui répond en temps réel aux questions sur les événements culturels à Paris. Il utilise une architecture RAG pour donner des réponses fiables et sourcées, à partir de données réelles récupérées via l'API Open Agenda. Côté technique il combine LangChain, le modèle Mistral AI pour la génération et FAISS pour la recherche. Jordan a particulièrement soigné la qualité des réponses et l'évaluation avec Ragas."
+  },
+  {
+    "question": "Comment fonctionne le chatbot de ce portfolio ?",
+    "reference": "Ce portfolio intègre un assistant conversationnel qui répond aux questions des recruteurs à partir d'une base de connaissances des projets réels de Jordan. Il utilise une architecture RAG : les expériences sont stockées dans la base vectorielle ChromaDB, converties en vecteurs avec le modèle all-MiniLM-L6-v2, et les réponses sont générées par l'API Mistral AI. L'objectif est de citer des informations précises et véridiques, sans inventer. Le frontend est développé en Angular avec un support multilingue."
+  },
+  {
+    "question": "Jordan a-t-il un projet lié à la désinformation ou aux fake news ?",
+    "reference": "Oui, CheckItAI est un pipeline de données conçu pour alimenter des solutions de détection de fake news. Il collecte automatiquement des publications (texte et image) depuis des flux d'actualité, les normalise et les stocke dans une base de données, avec une collecte régulière orchestrée par Airflow et un suivi des indicateurs de qualité."
+  },
+  {
+    "question": "Jordan a-t-il de l'expérience avec le langage Rust ?",
+    "reference": "Oui, il a utilisé Rust pour le backend temps réel de Neurova, son application mobile de jeux cognitifs. Ce serveur, construit avec Axum et Tokio, garde la main sur la logique des parties multijoueur (les clients ne font qu'afficher et envoyer les actions), et gère les connexions en temps réel via WebSocket, avec PostgreSQL et Redis."
+  },
+  {
+    "question": "Quel projet montre le mieux ses compétences en MLOps et en monitoring ?",
+    "reference": "Le système de scoring de crédit est un bon exemple : au-delà du modèle, Jordan y a mis en place une vraie infrastructure de suivi en production, avec la détection de la dérive des données via Evidently AI, la collecte de métriques avec Prometheus, des tableaux de bord Grafana en temps réel, et la centralisation des logs. Le chatbot de triage médical illustre aussi cet aspect, avec une évaluation bloquante dans la CI/CD et du monitoring de la latence et des erreurs."
+  },
+  {
+    "question": "Jordan a-t-il travaillé sur la prédiction des départs d'employés ?",
+    "reference": "Oui, avec Futurisys : une API de prédiction, déployée en production, qui estime la probabilité qu'un employé démissionne pour aider les ressources humaines à anticiper les départs. Le projet met l'accent sur les bonnes pratiques d'ingénierie logicielle : gestion de versions, tests automatisés avec Pytest, et un pipeline CI/CD qui automatise les tests et le déploiement."
+  },
+  {
+    "question": "Est-ce que Jordan sait construire des API backend ?",
+    "reference": "Oui, il utilise beaucoup FastAPI, un framework Python moderne pour créer des API rapides. On le retrouve dans la majorité de ses projets : le scoring de crédit, le coach d'échecs, le chatbot de triage médical, Futurisys, l'agent lunaire et le chatbot de ce portfolio. Il y associe généralement la validation des données avec Pydantic et une base PostgreSQL."
   }
 ]

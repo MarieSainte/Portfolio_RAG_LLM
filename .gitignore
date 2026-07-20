@@ -15,5 +15,11 @@ dist/
 # Résultats d'évaluation
 backend/evals/ragas_results.csv
 
+# Journal des interactions (SQLite + FTS5, persistant, non versionné)
+backend/data/
+*.db
+*.db-wal
+*.db-shm
+
 # Documents personnels
 rapport de conduite.odt

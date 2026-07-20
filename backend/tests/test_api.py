@@ -14,9 +14,9 @@ def test_chat_ok(client, monkeypatch):
     def fake_response(message, history=None):
         captured["message"] = message
         captured["history"] = history
-        return "Réponse de test"
+        return "Réponse de test", ["contexte"]
 
-    monkeypatch.setattr(controller.mistral_service, "get_chat_response", fake_response)
+    monkeypatch.setattr(controller.mistral_service, "answer_with_contexts", fake_response)
 
     resp = client.post(
         "/chat",
@@ -35,8 +35,8 @@ def test_chat_ok(client, monkeypatch):
 def test_chat_service_error_returns_500(client, monkeypatch):
     monkeypatch.setattr(
         controller.mistral_service,
-        "get_chat_response",
-        lambda message, history=None: "Error: boom",
+        "answer_with_contexts",
+        lambda message, history=None: ("Error: boom", []),
     )
     resp = client.post("/chat", json={"message": "x"})
     assert resp.status_code == 500
@@ -51,8 +51,8 @@ def test_chat_rate_limited(client, monkeypatch):
     # Réponse instantanée pour ne pas dépendre du LLM
     monkeypatch.setattr(
         controller.mistral_service,
-        "get_chat_response",
-        lambda message, history=None: "ok",
+        "answer_with_contexts",
+        lambda message, history=None: ("ok", []),
     )
     # Le limiteur est désactivé par les autres tests, son compteur est donc à zéro ici.
     limiter.enabled = True

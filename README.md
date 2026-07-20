@@ -37,17 +37,32 @@ Le frontend nginx sert l'app Angular **et** proxifie `/api` vers le backend : un
 |---|---|
 | **Frontend** | Angular 21, TypeScript, SCSS, RxJS, ngx-translate |
 | **Backend** | Python 3.10, FastAPI, Pydantic, Uvicorn |
-| **RAG / LLM** | LangChain, Mistral AI, ChromaDB, Sentence-Transformers, Cross-Encoder reranker |
+| **RAG / LLM** | LangChain, Mistral AI, ChromaDB, SQLite FTS5 (BM25), Sentence-Transformers, Cross-Encoder reranker |
 | **Observabilité** | LangSmith (tracing) |
 | **Évaluation** | Ragas (LLM-as-a-judge) |
 | **Infra / CI-CD** | Docker, Docker Compose, GitHub Actions, GHCR |
 
 ## 🔎 Pipeline RAG
 
-1. **Indexation** — le CSV des projets est découpé (`RecursiveCharacterTextSplitter`) et vectorisé (`all-MiniLM-L6-v2`) dans ChromaDB au démarrage.
-2. **Recherche dense** — les *k=10* chunks les plus proches de la question sont récupérés.
-3. **Reranking** — un cross-encoder multilingue (`mmarco-mMiniLMv2-L12`) réordonne et ne garde que les *top-3* (précision accrue, tourne sur CPU).
+1. **Indexation** — le CSV des projets est découpé (`RecursiveCharacterTextSplitter`, `CHUNK_SIZE` configurable) puis indexé au démarrage dans **deux** stores : ChromaDB (vecteurs `all-MiniLM-L6-v2`) et un index lexical SQLite FTS5.
+2. **Recherche hybride** — en parallèle, recherche **dense** (Chroma, *k=10*, proximité sémantique) et **lexicale** (FTS5/BM25, *k=10*, correspondance exacte de mots-clés : technos, acronymes). Les candidats des deux sources sont fusionnés et dédupliqués.
+3. **Reranking** — un cross-encoder multilingue (`mmarco-mMiniLMv2-L12`) réordonne l'ensemble fusionné et ne garde que les *top-5* (précision accrue, tourne sur CPU).
 4. **Génération** — Mistral AI répond en s'appuyant **uniquement** sur ce contexte (prompt système strict anti-hallucination).
+
+## 🗂️ Journal des interactions
+
+Chaque échange (`/chat`) est enregistré dans une base **SQLite persistante** avec un index **FTS5** (recherche plein-texte BM25 sur questions + réponses). Utile pour analyser ce que demandent les visiteurs.
+
+Consultation via un endpoint d'administration, **désactivé par défaut** : il ne s'active que si `ADMIN_TOKEN` est défini, et exige alors l'en-tête `X-Admin-Token`.
+
+```bash
+# Dernières interactions
+curl -H "X-Admin-Token: $ADMIN_TOKEN" http://localhost:8080/api/admin/interactions
+# Recherche plein-texte (FTS5)
+curl -H "X-Admin-Token: $ADMIN_TOKEN" "http://localhost:8080/api/admin/interactions?q=fine-tuning"
+```
+
+La base vit dans `/app/data` (bind mount `./data` en prod) : elle **survit au redéploiement** et n'est pas effacée par le `down -v` qui reconstruit l'index vectoriel.
 
 ## 🚀 Démarrage local
 

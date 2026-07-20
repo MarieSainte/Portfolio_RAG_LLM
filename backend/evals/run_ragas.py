@@ -44,7 +44,7 @@ def main() -> int:
     from app.services.rag_service import rag_service
 
     # Seuils PLANCHER (temporaires) : volontairement bas pour ne détecter qu'un
-    # pipeline cassé, sans bloquer sur la variance du juge LLM (dataset de 6 questions).
+    # pipeline cassé, sans bloquer sur la variance du juge LLM.
     # Baseline observée : faithfulness ~0.56, relevancy ~0.70, precision ~0.82, recall ~0.51.
     # TODO : relever ces seuils une fois la qualité du RAG affinée.
     thresholds = [

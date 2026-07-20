@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup LOGIC
+    from app.services.interaction_store import interaction_store
     from app.services.rag_service import rag_service
 
     # experience.csv est dans backend/app/data, ce fichier dans backend/app/core
@@ -22,7 +23,11 @@ async def lifespan(app: FastAPI):
     except Exception:
         logger.exception("startup: failed to index CSV")
 
+    # Ouvre la base de journalisation des interactions (SQLite + FTS5).
+    interaction_store.connect()
+
     yield
 
     # Shutdown LOGIC
     logger.info("shutdown: cleaning up resources")
+    interaction_store.close()

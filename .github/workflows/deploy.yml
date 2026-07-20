@@ -113,6 +113,9 @@ jobs:
           MISTRAL_API_KEY=${{ secrets.MISTRAL_API_KEY }}
           MISTRAL_MODEL=mistral-medium-latest
           CHAT_RATE_LIMIT=10/minute
+          CHUNK_SIZE=${{ vars.CHUNK_SIZE || '500' }}
+          CHUNK_OVERLAP=${{ vars.CHUNK_OVERLAP || '50' }}
+          ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }}
           LANGSMITH_TRACING=${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}
           LANGSMITH_API_KEY=${{ secrets.LANGSMITH_API_KEY }}
           LANGSMITH_PROJECT=portfolio-chatbot
@@ -133,6 +136,10 @@ jobs:
             echo 'Déploiement du tag: ${{ env.IMAGE_TAG }}'
             echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose -f docker-compose.prod.yml pull
+            # down -v détruit le volume chroma_data (seul volume nommé du compose prod) :
+            # l'index vectoriel est reconstruit au démarrage avec le CHUNK_SIZE courant,
+            # ce qui permet de tester différentes tailles de chunk d'un déploiement à l'autre.
+            docker compose -f docker-compose.prod.yml down -v
             docker compose -f docker-compose.prod.yml up -d
             docker image prune -f
             docker logout ghcr.io

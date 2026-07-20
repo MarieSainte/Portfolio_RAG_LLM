@@ -32,10 +32,22 @@ services:
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
       - CHAT_RATE_LIMIT=${CHAT_RATE_LIMIT:-10/minute}
+      # Découpage des documents (expérimentation de chunk size). L'index est
+      # reconstruit à chaque déploiement (voir deploy.yml : down -v).
+      - CHUNK_SIZE=${CHUNK_SIZE:-500}
+      - CHUNK_OVERLAP=${CHUNK_OVERLAP:-50}
+      # Journalisation des interactions (SQLite + FTS5). ADMIN_TOKEN vide -> endpoint
+      # d'admin désactivé. Le fichier vit dans /app/data (bind mount ci-dessous).
+      - INTERACTIONS_DB_PATH=/app/data/interactions.db
+      - ADMIN_TOKEN=${ADMIN_TOKEN:-}
       - LANGSMITH_TRACING=${LANGSMITH_TRACING:-false}
       - LANGSMITH_ENDPOINT=${LANGSMITH_ENDPOINT:-https://api.smith.langchain.com}
       - LANGSMITH_API_KEY=${LANGSMITH_API_KEY:-}
       - LANGSMITH_PROJECT=${LANGSMITH_PROJECT:-portfolio-chatbot}
+    volumes:
+      # Bind mount (pas un volume nommé) : survit au `down -v` du déploiement, donc le
+      # journal des interactions n'est PAS effacé quand on reconstruit l'index Chroma.
+      - ./data:/app/data
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s

@@ -26,6 +26,13 @@ class JsonFormatter(logging.Formatter):
         return json.dumps(payload, ensure_ascii=False)
 
 
+class HealthCheckFilter(logging.Filter):
+    """Supprime les accès au /health (sonde Docker toutes les 30 s) : pur bruit dans les logs."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        return "/health" not in record.getMessage()
+
+
 def setup_logging() -> None:
     """Configure le logging racine en JSON sur stderr. Idempotent.
 
@@ -45,3 +52,6 @@ def setup_logging() -> None:
         lg = logging.getLogger(name)
         lg.handlers = [handler]
         lg.propagate = False
+
+    # Coupe le bruit des healthchecks (GET /health toutes les 30 s) à la source.
+    logging.getLogger("uvicorn.access").addFilter(HealthCheckFilter())

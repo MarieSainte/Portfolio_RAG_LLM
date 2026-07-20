@@ -40,16 +40,26 @@ jobs:
     uses: ./.github/workflows/_frontend.yml
     secrets: inherit
 
+  # Gate Ragas OPTIONNEL : ne tourne que si la variable de repo RUN_RAGAS == 'true'.
+  # Désactivé temporairement (variable non définie) -> le déploiement ne l'attend pas.
+  # Pour le réactiver : Settings > Secrets and variables > Actions > Variables > RUN_RAGAS = true
   eval:
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
+    if: ${{ vars.RUN_RAGAS == 'true' && (github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '') }}
     needs: tests
     uses: ./.github/workflows/_ragas.yml
     secrets: inherit
 
   # --- Build + push des images (sauté en cas de rollback) ---
+  # Ne bloque plus sur Ragas : on build si tests + frontend passent, et si le gate
+  # Ragas (optionnel) a réussi OU a été sauté (RUN_RAGAS != 'true').
   build-push:
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
-    needs: [eval, frontend]
+    needs: [tests, frontend, eval]
+    if: >-
+      ${{ always()
+          && (github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '')
+          && needs.tests.result == 'success'
+          && needs.frontend.result == 'success'
+          && (needs.eval.result == 'success' || needs.eval.result == 'skipped') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

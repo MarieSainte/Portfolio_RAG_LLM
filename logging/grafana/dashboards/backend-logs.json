@@ -31,7 +31,7 @@
       "type": "logs",
       "title": "Logs backend",
       "datasource": { "type": "loki", "uid": "loki" },
-      "gridPos": { "h": 16, "w": 24, "x": 0, "y": 0 },
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 0 },
       "options": {
         "showTime": true,
         "showLabels": false,
@@ -44,7 +44,7 @@
         {
           "refId": "A",
           "datasource": { "type": "loki", "uid": "loki" },
-          "expr": "{job=\"backend\", level=~\"$level\"}",
+          "expr": "{job=\"backend\", level=~\"$level\"} | json | line_format \"[{{.level}}] {{.logger}} - {{.message}}\"",
           "queryType": "range"
         }
       ]
@@ -53,7 +53,7 @@
       "type": "timeseries",
       "title": "Débit de logs par niveau (logs/s)",
       "datasource": { "type": "loki", "uid": "loki" },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 16 },
       "targets": [
         {
           "refId": "A",
@@ -68,7 +68,7 @@
       "type": "timeseries",
       "title": "Latence réponse IA (ms)",
       "datasource": { "type": "loki", "uid": "loki" },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 16 },
       "fieldConfig": {
         "defaults": {
           "unit": "ms",
@@ -97,7 +97,7 @@
       "type": "stat",
       "title": "Latence médiane (dernière heure)",
       "datasource": { "type": "loki", "uid": "loki" },
-      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 24 },
+      "gridPos": { "h": 4, "w": 12, "x": 0, "y": 24 },
       "fieldConfig": {
         "defaults": {
           "unit": "ms",

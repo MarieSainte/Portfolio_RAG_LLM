@@ -43,15 +43,15 @@ def main() -> int:
     from app.services.mistral_service import mistral_service
     from app.services.rag_service import rag_service
 
-    # Seuils PLANCHER (temporaires) : volontairement bas pour ne détecter qu'un
-    # pipeline cassé, sans bloquer sur la variance du juge LLM.
-    # Baseline observée : faithfulness ~0.56, relevancy ~0.70, precision ~0.82, recall ~0.51.
-    # TODO : relever ces seuils une fois la qualité du RAG affinée.
+    # Seuils réels, calibrés ~20-30 % sous le baseline mesuré (juge mistral-small, 15 Q,
+    # prompt v6 + chunks entiers). Baseline : faithfulness 0.90, relevancy 0.44,
+    # precision 0.89, recall 0.67. Marge volontaire pour absorber la variance du juge
+    # sans faire échouer le gate à tort ; ils détectent une vraie régression du pipeline.
     thresholds = [
-        (Faithfulness(), 0.30),
-        (ResponseRelevancy(), 0.40),
-        (LLMContextPrecisionWithReference(), 0.40),
-        (LLMContextRecall(), 0.30),
+        (Faithfulness(), 0.72),
+        (ResponseRelevancy(), 0.30),
+        (LLMContextPrecisionWithReference(), 0.70),
+        (LLMContextRecall(), 0.50),
     ]
 
     # 1. Indexation du corpus dans ChromaDB

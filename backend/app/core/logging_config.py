@@ -10,7 +10,10 @@ class JsonFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         payload = {
-            "time": self.formatTime(record, "%Y-%m-%dT%H:%M:%S"),
+            # Clé "ts" et NON "time" : Fluentd interprète un champ "time" comme
+            # l'horodatage de l'événement et rejette la ligne si le format ne lui
+            # convient pas -> les logs applicatifs n'atteignaient jamais Loki.
+            "ts": self.formatTime(record, "%Y-%m-%dT%H:%M:%S"),
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),

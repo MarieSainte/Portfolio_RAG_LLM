@@ -12,7 +12,8 @@
     "HERO": {
       "GREETING": "Hi, I'm",
       "NAME": "Jordan Marie-Sainte",
-      "TITLE": "AI Engineer",
+      "TITLE": "LLM Engineer",
+      "SPECIALTY": "RAG & Fine-tuning",
       "SUBTITLE": "With 5 years of helpdesk & application support experience, I'm transitioning into Artificial Intelligence to build intelligent systems that solve real business problems.",
       "CTA_PROJECTS": "See my projects",
       "CTA_CONTACT": "Get in touch",

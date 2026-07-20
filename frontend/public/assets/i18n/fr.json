@@ -12,7 +12,8 @@
     "HERO": {
       "GREETING": "Bonjour, je suis",
       "NAME": "Jordan Marie-Sainte",
-      "TITLE": "Ingénieur IA",
+      "TITLE": "Ingénieur LLM",
+      "SPECIALTY": "RAG & Fine-tuning",
       "SUBTITLE": "Fort de 5 ans d'expérience en support helpdesk & applicatif, je me réoriente vers l'Intelligence Artificielle pour créer des systèmes intelligents qui résolvent des problèmes concrets.",
       "CTA_PROJECTS": "Voir mes projets",
       "CTA_CONTACT": "Me contacter",

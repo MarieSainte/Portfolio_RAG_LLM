@@ -82,6 +82,18 @@
     font-weight: 700;
   }
 
+  // Sous-ligne discrète : spécialisation (RAG & Fine-tuning) sous l'intitulé.
+  &__specialty {
+    margin-top: 6px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: clamp(0.8rem, 1.6vw, 0.95rem);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    opacity: 0;
+    animation: fadeInUp 0.7s ease 0.35s forwards;
+  }
+
   &__subtitle {
     font-size: 1.05rem;
     color: var(--text-muted);

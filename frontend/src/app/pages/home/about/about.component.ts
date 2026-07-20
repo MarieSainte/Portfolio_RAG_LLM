@@ -43,7 +43,8 @@ import { TranslateModule } from '@ngx-translate/core';
                 <span class="info-card__title">profile.json</span>
               </div>
               <pre class="info-card__code"><span class="c-bracket">&#123;</span>
-  <span class="c-key">"role"</span><span class="c-punct">:</span> <span class="c-string">"Ingénieur IA"</span><span class="c-punct">,</span>
+  <span class="c-key">"role"</span><span class="c-punct">:</span> <span class="c-string">"Ingénieur LLM"</span><span class="c-punct">,</span>
+  <span class="c-key">"focus"</span><span class="c-punct">:</span> <span class="c-string">"RAG &amp; Fine-tuning"</span><span class="c-punct">,</span>
   <span class="c-key">"status"</span><span class="c-punct">:</span> <span class="c-string">"Junior"</span><span class="c-punct">,</span>
   <span class="c-key">"experience"</span><span class="c-punct">:</span> <span class="c-string">"5 ans Support IT"</span><span class="c-punct">,</span>
   <span class="c-key">"location"</span><span class="c-punct">:</span> <span class="c-string">"France 🇫🇷"</span><span class="c-punct">,</span>

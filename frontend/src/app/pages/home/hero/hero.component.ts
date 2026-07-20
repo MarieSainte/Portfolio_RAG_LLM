@@ -30,6 +30,10 @@ import { MarkdownPipe } from '../../../shared/markdown.pipe';
               <span class="hero__title-prefix">/&gt;</span>
             </div>
 
+            <div class="hero__specialty animate-fade-in-up delay-300">
+              {{ 'HOME.HERO.SPECIALTY' | translate }}
+            </div>
+
             <p class="hero__subtitle animate-fade-in-up delay-300">
               {{ 'HOME.HERO.SUBTITLE' | translate }}
             </p>

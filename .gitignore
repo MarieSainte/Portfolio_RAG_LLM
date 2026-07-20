@@ -20,6 +20,6 @@ backend/data/
 *.db
 *.db-wal
 *.db-shm
-
+notes/
 # Documents personnels
 rapport de conduite.odt

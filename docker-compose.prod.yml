@@ -40,7 +40,7 @@ services:
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
-      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-small-latest}
+      - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
       - CHAT_RATE_LIMIT=${CHAT_RATE_LIMIT:-10/minute}
       # Découpage des documents (expérimentation de chunk size). L'index est
       # reconstruit à chaque déploiement (voir deploy.yml : down -v).

@@ -37,7 +37,7 @@ class RAGService:
         self._client = None
         self._vectorstore = None
         self._dense_retriever = None
-        self._reranker = None
+        self._cross_encoder = None
         self.lexical_index = LexicalIndex()
 
     @property
@@ -80,15 +80,38 @@ class RAGService:
         return self._dense_retriever
 
     @property
-    def reranker(self):
-        """Reranker cross-encoder multilingue (CPU), partagé dense + lexical."""
-        if self._reranker is None:
-            cross_encoder = HuggingFaceCrossEncoder(
+    def cross_encoder(self):
+        """Modèle cross-encoder multilingue (CPU), chargé une fois et réutilisé."""
+        if self._cross_encoder is None:
+            self._cross_encoder = HuggingFaceCrossEncoder(
                 model_name=settings.RERANKER_MODEL,
                 model_kwargs={"device": "cpu"},
             )
-            self._reranker = CrossEncoderReranker(model=cross_encoder, top_n=settings.RERANK_TOP_N)
-        return self._reranker
+        return self._cross_encoder
+
+    def _make_reranker(self, top_n: int) -> CrossEncoderReranker:
+        """Reranker avec un top_n dynamique (le modèle sous-jacent reste en cache)."""
+        return CrossEncoderReranker(model=self.cross_encoder, top_n=top_n)
+
+    def _adaptive_sizes(self, query_text: str) -> tuple[int, int]:
+        """(k_candidats, top_n) ajustés à la longueur de la question.
+
+        Question courte -> peu de contextes (précis) ; longue -> plus (synthèse).
+        Mode non adaptatif -> (RETRIEVER_K, RERANK_TOP_N) fixes.
+        """
+        if not settings.ADAPTIVE_RETRIEVAL:
+            return settings.RETRIEVER_K, settings.RERANK_TOP_N
+        words = len(query_text.split())
+        lo, hi = settings.QUERY_SHORT_WORDS, settings.QUERY_LONG_WORDS
+        tmin, tmax = settings.RERANK_TOP_N_MIN, settings.RERANK_TOP_N_MAX
+        if words <= lo:
+            top_n = tmin
+        elif words >= hi:
+            top_n = tmax
+        else:
+            frac = (words - lo) / (hi - lo)
+            top_n = round(tmin + frac * (tmax - tmin))
+        return top_n * settings.RETRIEVER_K_FACTOR, top_n
 
     def _build_chunks(self, csv_path: str) -> tuple[list[Document], list[str]]:
         """Découpe le CSV en chunks -> (documents, ids). Liste vide si le fichier manque."""
@@ -171,20 +194,28 @@ class RAGService:
             },
         )
 
-    def _dense_candidates(self, query_text: str) -> list[Document]:
-        retriever = self.retriever
-        if retriever is None:
+    def _dense_candidates(self, query_text: str, k: int) -> list[Document]:
+        vs = self.vectorstore
+        if vs is None:
             return []
         try:
-            return retriever.invoke(query_text)
+            return vs.similarity_search(query_text, k=k)
         except Exception:
             logger.exception("dense retrieval error")
             return []
 
     def retrieve(self, query_text: str) -> list:
-        """Retrieval hybride : fusion dense + lexical, puis reranking cross-encoder."""
-        dense_docs = self._dense_candidates(query_text)
-        lexical_docs = self.lexical_index.search(query_text, settings.LEXICAL_K)
+        """Retrieval hybride : fusion dense + lexical, puis reranking cross-encoder.
+
+        Le nombre de candidats et de contextes finaux s'adapte à la longueur de la question.
+        """
+        k, top_n = self._adaptive_sizes(query_text)
+        logger.info(
+            "retrieval sizes",
+            extra={"context": {"words": len(query_text.split()), "k": k, "top_n": top_n}},
+        )
+        dense_docs = self._dense_candidates(query_text, k)
+        lexical_docs = self.lexical_index.search(query_text, k)
 
         # Fusion + déduplication par contenu (un chunk peut sortir des deux sources).
         merged: dict[str, Document] = {}
@@ -195,11 +226,11 @@ class RAGService:
             return []
 
         try:
-            return list(self.reranker.compress_documents(candidates, query_text))
+            return list(self._make_reranker(top_n).compress_documents(candidates, query_text))
         except Exception:
             logger.exception("reranking error")
             # Repli : renvoyer les candidats fusionnés bornés à top_n, sans reranking.
-            return candidates[: settings.RERANK_TOP_N]
+            return candidates[:top_n]
 
 
 # Singleton instance

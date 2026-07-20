@@ -39,6 +39,7 @@ services:
       - CHROMA_PORT=8000
       - MISTRAL_API_KEY=${MISTRAL_API_KEY}
       - MISTRAL_MODEL=${MISTRAL_MODEL:-mistral-medium-latest}
+      - CHAT_RATE_LIMIT=${CHAT_RATE_LIMIT:-10/minute}
       # Découpage des documents avant indexation (test de différentes tailles de chunk).
       - CHUNK_SIZE=${CHUNK_SIZE:-500}
       - CHUNK_OVERLAP=${CHUNK_OVERLAP:-50}

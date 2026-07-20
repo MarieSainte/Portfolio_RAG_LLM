@@ -40,17 +40,50 @@ jobs:
     uses: ./.github/workflows/_frontend.yml
     secrets: inherit
 
-  # Gate qualité RAG (Ragas) : bloque le déploiement si un score passe sous son seuil.
-  eval:
+  # Détecte si le pipeline RAG a changé -> ne lancer Ragas (coûteux) que dans ce cas.
+  changes:
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
-    needs: tests
+    runs-on: ubuntu-latest
+    outputs:
+      rag: ${{ steps.filter.outputs.rag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: filter
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+            echo "Base introuvable -> on lance Ragas par prudence."
+            echo "rag=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          CHANGED=$(git diff --name-only "$BEFORE" "${{ github.sha }}")
+          echo "Fichiers modifiés :"; echo "$CHANGED"
+          if echo "$CHANGED" | grep -qE '^backend/(app/services/(rag_service|lexical_index|mistral_service)\.py|app/core/config\.py|app/data/experience\.csv|evals/)'; then
+            echo "rag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "rag=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  # Gate qualité RAG (Ragas) : ne tourne QUE si le pipeline RAG a changé (juge = mistral-small).
+  eval:
+    needs: [tests, changes]
+    if: ${{ needs.changes.outputs.rag == 'true' && (github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '') }}
     uses: ./.github/workflows/_ragas.yml
     secrets: inherit
 
   # --- Build + push des images (sauté en cas de rollback) ---
+  # Ne bloque pas si Ragas a été sauté (RAG inchangé) : exige tests + frontend OK,
+  # et eval réussi OU sauté.
   build-push:
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '' }}
-    needs: [eval, frontend]
+    needs: [tests, frontend, eval]
+    if: >-
+      ${{ always()
+          && (github.event_name != 'workflow_dispatch' || inputs.rollback_sha == '')
+          && needs.tests.result == 'success'
+          && needs.frontend.result == 'success'
+          && (needs.eval.result == 'success' || needs.eval.result == 'skipped') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read

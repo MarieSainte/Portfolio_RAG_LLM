@@ -22,7 +22,7 @@ jobs:
       CHROMA_HOST: localhost
       CHROMA_PORT: "8000"
       MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-      RAGAS_JUDGE_MODEL: mistral-large-latest
+      RAGAS_JUDGE_MODEL: mistral-small-latest
       # Tracing LangSmith des runs d'éval (activé seulement si le secret existe)
       LANGSMITH_TRACING: ${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}
       LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}

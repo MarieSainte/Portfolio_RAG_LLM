@@ -20,7 +20,7 @@ from pathlib import Path
 
 DATASET_PATH = Path(__file__).parent / "dataset.json"
 RESULTS_PATH = Path(__file__).parent / "ragas_results.csv"
-JUDGE_MODEL = os.getenv("RAGAS_JUDGE_MODEL", "mistral-large-latest")
+JUDGE_MODEL = os.getenv("RAGAS_JUDGE_MODEL", "mistral-small-latest")
 
 
 def main() -> int:

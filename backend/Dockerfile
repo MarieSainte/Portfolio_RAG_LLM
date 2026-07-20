@@ -2,6 +2,13 @@
 
 FROM python:3.10-slim
 
+# PYTHONUNBUFFERED : stdout non bufferisé. Sans ça, les logs applicatifs (JSON écrits
+# sur stdout) restent coincés dans le buffer Python et n'atteignent jamais Fluentd/Loki
+# en temps réel (seul stderr — les barres tqdm — remontait).
+# TQDM_DISABLE : coupe les barres de progression "Batches" des modèles ML dans les logs.
+ENV PYTHONUNBUFFERED=1 \
+    TQDM_DISABLE=1
+
 # Install system dependencies if needed (e.g., for pandas/numpy)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \

@@ -6,6 +6,7 @@ on:
     paths:
       - "backend/**"
       - "frontend/**"
+      - "logging/**"
       - "docker-compose.prod.yml"
       - ".github/workflows/deploy.yml"
       - ".github/workflows/_tests.yml"
@@ -25,6 +26,7 @@ concurrency:
 env:
   IMAGE_BACKEND: ghcr.io/mariesainte/portfolio-backend
   IMAGE_FRONTEND: ghcr.io/mariesainte/portfolio-frontend
+  IMAGE_FLUENTD: ghcr.io/mariesainte/portfolio-fluentd
 
 jobs:
   # --- Gates qualité (sautées en cas de rollback) ---
@@ -85,6 +87,17 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Build & push fluentd (collecteur de logs -> Loki)
+        uses: docker/build-push-action@v6
+        with:
+          context: ./logging/fluentd
+          push: true
+          tags: |
+            ${{ env.IMAGE_FLUENTD }}:latest
+            ${{ env.IMAGE_FLUENTD }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   # --- Déploiement (image épinglée par SHA, ou rollback_sha) ---
   deploy:
     needs: build-push
@@ -119,6 +132,8 @@ jobs:
           LANGSMITH_TRACING=${{ secrets.LANGSMITH_API_KEY != '' && 'true' || 'false' }}
           LANGSMITH_API_KEY=${{ secrets.LANGSMITH_API_KEY }}
           LANGSMITH_PROJECT=portfolio-chatbot
+          GRAFANA_ADMIN_USER=${{ vars.GRAFANA_ADMIN_USER || 'admin' }}
+          GRAFANA_ADMIN_PASSWORD=${{ secrets.GRAFANA_ADMIN_PASSWORD }}
           EOF
 
       - name: Copy files to server
@@ -127,6 +142,9 @@ jobs:
           ssh $SSH_OPTS ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "mkdir -p ~/portfolio"
           scp $SSH_OPTS docker-compose.prod.yml ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/portfolio/docker-compose.prod.yml
           scp $SSH_OPTS .env.deploy ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/portfolio/.env
+          # Configs d'observabilité (fluentd/loki + provisioning et dashboards Grafana),
+          # montées par la stack : elles doivent exister sur le serveur.
+          scp -r $SSH_OPTS logging ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/portfolio/
 
       - name: Pull images & restart stack
         run: |
@@ -136,10 +154,11 @@ jobs:
             echo 'Déploiement du tag: ${{ env.IMAGE_TAG }}'
             echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u ${{ github.actor }} --password-stdin
             docker compose -f docker-compose.prod.yml pull
-            # down -v détruit le volume chroma_data (seul volume nommé du compose prod) :
-            # l'index vectoriel est reconstruit au démarrage avec le CHUNK_SIZE courant,
-            # ce qui permet de tester différentes tailles de chunk d'un déploiement à l'autre.
-            docker compose -f docker-compose.prod.yml down -v
+            docker compose -f docker-compose.prod.yml down
+            # On reconstruit UNIQUEMENT l'index vectoriel (test de chunk size d'un déploiement
+            # à l'autre) en supprimant son seul volume, sans toucher à l'historique
+            # d'observabilité (loki_data/grafana_data) ni au journal d'interactions (bind mount).
+            docker volume rm portfolio_chroma_data 2>/dev/null || true
             docker compose -f docker-compose.prod.yml up -d
             docker image prune -f
             docker logout ghcr.io

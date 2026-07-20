@@ -26,6 +26,16 @@ services:
     depends_on:
       chromadb:
         condition: service_started
+      fluentd:
+        condition: service_started
+    # Logs (stdout JSON) -> Fluentd -> Loki -> Grafana. fluentd-async : le backend
+    # ne bloque jamais si Fluentd n'est pas encore prêt (bufferise et réessaie).
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: "localhost:24224"
+        fluentd-async: "true"
+        tag: "backend"
     environment:
       - CHROMA_HOST=chromadb
       - CHROMA_PORT=8000
@@ -83,9 +93,77 @@ services:
         limits:
           memory: 256m
 
+  # --- Stack d'observabilité des logs : Fluentd -> Loki -> Grafana ---
+  # Image fluentd (plugin Loki) buildée et publiée par la CI, comme backend/frontend.
+
+  fluentd:
+    image: ghcr.io/mariesainte/portfolio-fluentd:${IMAGE_TAG:-latest}
+    container_name: portfolio_fluentd
+    restart: unless-stopped
+    volumes:
+      - ./logging/fluentd/conf:/fluentd/etc:ro
+    # Écoute uniquement sur la loopback du serveur : le driver de logs Docker s'y
+    # connecte depuis l'hôte, jamais exposé publiquement.
+    ports:
+      - "127.0.0.1:24224:24224"
+      - "127.0.0.1:24224:24224/udp"
+    depends_on:
+      - loki
+    networks:
+      - portfolio_net
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
+  loki:
+    image: grafana/loki:2.9.8
+    container_name: portfolio_loki
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yml
+    volumes:
+      - ./logging/loki/loki-config.yml:/etc/loki/local-config.yml:ro
+      - loki_data:/loki
+    networks:
+      - portfolio_net
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: portfolio_grafana
+    restart: unless-stopped
+    environment:
+      # Pas d'accès anonyme en prod : login admin obligatoire (mot de passe en secret).
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+    # Publié sur la loopback du serveur uniquement : accès via tunnel SSH
+    # (ssh -L 3000:localhost:3000 serveur), aucune surface publique.
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - ./logging/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./logging/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - loki
+    networks:
+      - portfolio_net
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+
 networks:
   portfolio_net:
     driver: bridge
 
 volumes:
   chroma_data:
+  # Historique d'observabilité : préservé entre déploiements (voir deploy.yml,
+  # seul chroma_data est reconstruit).
+  loki_data:
+  grafana_data:

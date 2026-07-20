@@ -24,8 +24,13 @@ class JsonFormatter(logging.Formatter):
 
 
 def setup_logging() -> None:
-    """Configure le logging racine en JSON sur stdout. Idempotent."""
-    handler = logging.StreamHandler(sys.stdout)
+    """Configure le logging racine en JSON sur stderr. Idempotent.
+
+    stderr (non bufferisé) et non stdout (bufferisé par blocs en conteneur) : sinon les
+    lignes JSON restent coincées dans le buffer et n'atteignent jamais le driver de logs
+    Docker -> Fluentd -> Loki en temps réel. Couplé à PYTHONUNBUFFERED=1 (Dockerfile).
+    """
+    handler = logging.StreamHandler(sys.stderr)
     handler.setFormatter(JsonFormatter())
 
     root = logging.getLogger()

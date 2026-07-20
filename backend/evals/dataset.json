@@ -1,7 +1,7 @@
 [
   {
     "question": "Bonjour ! Pouvez-vous me présenter Jordan en quelques mots ?",
-    "reference": "Jordan est ingénieur IA & LLM. Son portfolio réunit une dizaine de projets qui couvrent toute la chaîne de l'intelligence artificielle : des chatbots basés sur du RAG (triage médical, échecs, événements culturels, ce portfolio lui-même), du fine-tuning de modèles de langage, de la vision par ordinateur (imagerie médicale, mode), du reinforcement learning, du data engineering, et même une application mobile de jeux cognitifs. Plusieurs de ces projets ont été déployés en production avec des pipelines CI/CD, du monitoring et de la conteneurisation Docker."
+    "reference": "Jordan est un futur ingénieur IA / LLM, en recherche de son premier poste. Son portfolio réunit une dizaine de projets qui couvrent toute la chaîne de l'intelligence artificielle : des chatbots basés sur du RAG (triage médical, échecs, événements culturels, ce portfolio lui-même), du fine-tuning de modèles de langage, de la vision par ordinateur (imagerie médicale, mode), du reinforcement learning, du data engineering, et même une application mobile de jeux cognitifs. Plusieurs de ces projets ont été déployés en production avec des pipelines CI/CD, du monitoring et de la conteneurisation Docker."
   },
   {
     "question": "Parlez-moi du projet de chatbot de triage médical.",
@@ -49,7 +49,7 @@
   },
   {
     "question": "Hi! Can you introduce Jordan in a few words?",
-    "reference": "Jordan is an AI & LLM engineer based in Paris. His portfolio brings together around a dozen hands-on projects spanning the whole AI stack: RAG chatbots (medical triage, chess, cultural events, this portfolio), language-model fine-tuning, computer vision (medical imaging, fashion), reinforcement learning, data engineering, and a mobile cognitive-games app. Several projects were deployed to production with CI/CD pipelines, monitoring and Docker containerization."
+    "reference": "Jordan is an aspiring AI / LLM engineer based in Paris, looking for his first role. His portfolio brings together around a dozen hands-on projects spanning the whole AI stack: RAG chatbots (medical triage, chess, cultural events, this portfolio), language-model fine-tuning, computer vision (medical imaging, fashion), reinforcement learning, data engineering, and a mobile cognitive-games app. Several projects were deployed to production with CI/CD pipelines, monitoring and Docker containerization."
   },
   {
     "question": "Has Jordan already deployed models to production?",

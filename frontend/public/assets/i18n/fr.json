@@ -119,6 +119,10 @@
       "TITLE": "Portfolio & Assistant RAG",
       "DESC": "Ce site : un portfolio d'AI Engineer avec carte mentale interactive et assistant conversationnel RAG (ChromaDB + Mistral AI) qui présente mes projets aux recruteurs à partir de données réelles. Frontend Angular, backend FastAPI, conteneurisé avec Docker."
     },
+    "SENTINEL": {
+      "TITLE": "Sentinel — Enquête assistée par IA",
+      "DESC": "Plateforme d'enquête assistée par IA (projet en cours). Un chatbot qui transforme le langage naturel multilingue en requêtes et en insertions intelligentes pour tout type de base de données — relationnelle, graphe et vectorielle. Cible : journalistes et enquêteurs qui doivent relier rapidement des faits et alimenter plusieurs bases adaptées via des rapports."
+    },
     "STUDENT_1": {
       "TITLE": "Chatbot de Triage Médical",
       "DESC": "Agent conversationnel bilingue (Qwen3-1.7B) pour le triage des urgences. Fine-tuné SFT + DPO (LoRA/Unsloth), prompts optimisés DSPy, servi par vLLM sur GPU. CI/CD avec gate d'évaluation bloquante, monitoring Prometheus/Grafana, PostgreSQL, Docker."

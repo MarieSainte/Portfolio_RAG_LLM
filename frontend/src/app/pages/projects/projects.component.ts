@@ -218,6 +218,25 @@ export class ProjectsComponent {
 
   projects: Project[] = [
     {
+      id: 5,
+      titleKey: 'PROJECTS.SENTINEL.TITLE',
+      descKey: 'PROJECTS.SENTINEL.DESC',
+      tags: [
+        'En cours',
+        'Qwen3 · SFT',
+        'LangGraph',
+        'PostgreSQL',
+        'Neo4j',
+        'Milvus',
+        'FastAPI',
+        'React',
+        'RunPod',
+      ],
+      type: 'personal',
+      icon: '🕵️',
+      color: '#06b6d4',
+    },
+    {
       id: 1,
       titleKey: 'PROJECTS.STUDENT_1.TITLE',
       descKey: 'PROJECTS.STUDENT_1.DESC',

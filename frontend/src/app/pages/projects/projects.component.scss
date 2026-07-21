@@ -109,6 +109,13 @@
     color: var(--text-muted);
     line-height: 1.65;
     flex: 1;
+    // Limite à 3 lignes pour garder toutes les cartes à la même hauteur
+    // (la description complète reste visible dans la modale).
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   &__tags {
@@ -146,8 +153,8 @@
   display: inline-flex;
   align-items: center;
   padding: 3px 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--text-primary) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-primary) 12%, transparent);
   border-radius: 100px;
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -192,8 +199,8 @@
 }
 
 .modal-content {
-  background: rgba(20, 20, 25, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 900px;
@@ -218,7 +225,7 @@
   position: absolute;
   top: 24px;
   right: 24px;
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--text-primary) 8%, transparent);
   border: none;
   color: var(--text-muted);
   width: 40px;
@@ -229,7 +236,7 @@
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--text-primary) 15%, transparent);
     color: var(--text-primary);
     transform: rotate(90deg);
   }
@@ -309,8 +316,8 @@
 .modal-media {
   .video-container {
     aspect-ratio: 16 / 9;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    background: color-mix(in srgb, var(--text-primary) 4%, transparent);
+    border: 1px dashed var(--border);
     border-radius: var(--radius-md);
     @include flex-center;
   }

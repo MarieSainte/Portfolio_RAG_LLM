@@ -108,13 +108,13 @@
     font-size: 0.875rem;
     color: var(--text-muted);
     line-height: 1.65;
-    flex: 1;
-    // Limite à 3 lignes pour garder toutes les cartes à la même hauteur
-    // (la description complète reste visible dans la modale).
+    // Limite à 3 lignes avec « … » — pas de flex:1 ici : combiné à display:-webkit-box
+    // (requis par le line-clamp), le flex-grow casse l'ellipsis. Les actions restent
+    // en bas via leur propre margin-top:auto. Desc complète visible dans la modale.
     display: -webkit-box;
+    -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
     line-clamp: 3;
-    -webkit-box-orient: vertical;
     overflow: hidden;
   }
 

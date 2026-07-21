@@ -139,5 +139,6 @@ export const PROJECT_NODES: ProjectNodeData[] = [
     domain: 'genai',
     hasFact: true,
     stack: ['Angular', 'FastAPI', 'ChromaDB', 'sentence-transformers', 'Mistral AI'],
+    links: [{ label: 'GitHub', url: 'https://github.com/MarieSainte/Portfolio_RAG_LLM' }],
   },
 ];

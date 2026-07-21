@@ -125,7 +125,7 @@
     },
     "NEUROVA": {
       "TITLE": "Neurova — Entraînement Cérébral",
-      "DESC": "Application mobile de brain-training : 11 jeux cognitifs solo (mémoire, spatial, mots, logique) et 4 jeux multijoueur temps réel via WebSocket. Backend Rust (Axum) serveur-autoritatif, PostgreSQL/Redis, monétisation AdMob + abonnement premium. Sortie le 1er août sur Android et iOS."
+      "DESC": "Application mobile de brain-training : 11 jeux cognitifs solo (mémoire, spatial, mots, logique) et 4 jeux multijoueur temps réel via WebSocket. Backend Rust (Axum) serveur-autoritatif, PostgreSQL/Redis, monétisation AdMob + abonnement premium. Sortie le 1er août sur Android et iOS. Une grande partie de l'application a été développée en « vibe coding » (développement massivement assisté par IA)."
     },
     "STUDENT_2": {
       "TITLE": "Coach d'Échecs IA Interactif",

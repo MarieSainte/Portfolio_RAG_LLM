@@ -277,8 +277,10 @@ export class MindMapComponent implements AfterViewInit {
       return { type, x: chx, y: chy, link: `M ${x} ${y} L ${chx} ${chy}` };
     });
 
-    const linkX = x - 95 * Math.cos(dir);
-    const linkY = y - 95 * Math.sin(dir);
+    // Barre de lien GitHub : toujours DIRECTEMENT au-dessus du nœud, quelle que
+    // soit sa position sur l'ellipse (centrée horizontalement).
+    const linkX = x;
+    const linkY = y - 64;
 
     return { data, x, y, link, children, linkX, linkY };
   }

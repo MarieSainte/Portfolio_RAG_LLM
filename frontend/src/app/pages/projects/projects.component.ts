@@ -233,6 +233,7 @@ export class ProjectsComponent {
         'RunPod',
       ],
       type: 'personal',
+      github: 'https://github.com/MarieSainte/Sentinel',
       icon: '🕵️',
       color: '#06b6d4',
     },

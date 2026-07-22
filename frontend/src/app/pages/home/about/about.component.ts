@@ -18,7 +18,11 @@ import { TranslateModule } from '@ngx-translate/core';
             <p>{{ 'HOME.ABOUT.TEXT_1' | translate }}</p>
             <p>{{ 'HOME.ABOUT.TEXT_2' | translate }}</p>
             <p>{{ 'HOME.ABOUT.TEXT_3' | translate }}</p>
-            <a href="#" class="btn btn--primary about__cta">
+            <a
+              href="/assets/documents/cv-jordan-marie-sainte.pdf"
+              download="cv-jordan-marie-sainte.pdf"
+              class="btn btn--primary about__cta"
+            >
               <svg
                 width="16"
                 height="16"

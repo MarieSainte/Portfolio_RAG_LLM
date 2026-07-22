@@ -23,3 +23,8 @@ backend/data/
 notes/
 # Documents personnels
 rapport de conduite.odt
+*.pdf
+
+# Documents publics servis par le frontend
+!frontend/public/assets/documents/
+!frontend/public/assets/documents/*.pdf

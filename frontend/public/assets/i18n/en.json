@@ -138,6 +138,7 @@
     "EMPTY": "Projects coming soon...",
     "MODAL": {
       "DESCRIPTION": "Project Description",
+      "DOWNLOAD_REPORT": "Download report",
       "MEDIA_SOON": "Video coming soon"
     }
   },

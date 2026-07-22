@@ -102,6 +102,11 @@
     color: var(--text-primary);
     font-family: 'Roboto Mono', sans-serif;
     line-height: 1.3;
+    // Réserve 2 lignes : un titre sur 1 ou 2 lignes occupe la même hauteur,
+    // pour que les descriptions et tags restent alignés d'une carte à l'autre.
+    min-height: 2.6em;
+    display: flex;
+    align-items: center;
   }
 
   &__desc {
@@ -310,6 +315,7 @@
 
 .modal-links {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
 }
 

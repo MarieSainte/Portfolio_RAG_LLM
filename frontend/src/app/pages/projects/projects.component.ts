@@ -14,6 +14,7 @@ interface Project {
   github?: string;
   demo?: string;
   pptUrl?: string;
+  reportUrl?: string;
   videoUrl?: string;
   icon: string;
   color: string;
@@ -180,7 +181,11 @@ interface Project {
 
               <div class="modal-links">
                 @if (selectedProject.github) {
-                  <a [href]="selectedProject.github" target="_blank" class="btn btn--ghost"
+                  <a
+                    [href]="selectedProject.github"
+                    target="_blank"
+                    rel="noopener"
+                    class="btn btn--ghost"
                     >GitHub</a
                   >
                 }
@@ -188,6 +193,27 @@ interface Project {
                   <a [href]="selectedProject.pptUrl" target="_blank" class="btn btn--outline"
                     >PowerPoint</a
                   >
+                }
+                @if (selectedProject.reportUrl) {
+                  <a
+                    [href]="selectedProject.reportUrl"
+                    download="rapport-conduite-portfolio.pdf"
+                    class="btn btn--outline"
+                  >
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    {{ 'PROJECTS.MODAL.DOWNLOAD_REPORT' | translate }}
+                  </a>
                 }
               </div>
             </div>
@@ -273,6 +299,7 @@ export class ProjectsComponent {
       tags: ['Angular', 'FastAPI', 'RAG', 'ChromaDB', 'SQLite', 'Mistral AI', 'Docker', 'OVH'],
       type: 'personal',
       github: 'https://github.com/MarieSainte/Portfolio_RAG_LLM',
+      reportUrl: '/assets/documents/rapport-conduite-portfolio.pdf',
       icon: '🌐',
       color: '#f59e0b',
     },

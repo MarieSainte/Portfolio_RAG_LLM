@@ -138,6 +138,7 @@
     "EMPTY": "Projets bientôt disponibles...",
     "MODAL": {
       "DESCRIPTION": "Description du projet",
+      "DOWNLOAD_REPORT": "Télécharger le rapport",
       "MEDIA_SOON": "Vidéo bientôt disponible"
     }
   },
